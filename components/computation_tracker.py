@@ -4,37 +4,49 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import streamlit as st
 
 def render_computation_comparison(explicit_proxy: dict, latent_proxy: dict) -> None:
-    """Renders a Streamlit comparison of computation costs using st.columns and st.metric.
-    
-    Labels everything as 'Toy-model computation proxy'.
-    
-    Expected proxy dict keys (from model APIs):
-      - reasoning_tokens_emitted: int
-      - internal_state_updates: int
-      - total_ops: int (optional)
-      - ops_per_round: int (optional)
-      - description: str
-    """
-    st.markdown("### Computation Comparison")
-    st.caption("Toy-model computation proxy — not real hardware costs")
+    """Renders a structured comparison of computational proxies between Mode A and Mode B."""
+    st.markdown("### 📊 Computational Proxy Comparison")
+    st.caption("🟡 TOY-MODEL COMPUTATION PROXY — Conceptual metric comparison, not measured physical hardware joules/flops.")
     
     col1, col2 = st.columns(2)
     
     with col1:
-        st.markdown("**Mode A: Explicit Reasoning**")
-        st.metric("Reasoning Tokens Emitted", explicit_proxy.get('reasoning_tokens_emitted', 0))
-        st.metric("Internal State Updates", explicit_proxy.get('internal_state_updates', 0))
-        st.info(explicit_proxy.get('description', ''))
+        st.markdown("""
+        <div style="border: 1px solid #fed7aa; background-color: #fffaf5; border-radius: 8px; padding: 1rem; margin-bottom: 0.5rem;">
+            <div style="font-weight: 700; color: #c2410c; margin-bottom: 0.5rem; font-size: 1.05rem;">
+                Mode A: Explicit / Tokenized (CoT)
+            </div>
+            <div style="font-size: 0.88rem; color: #431407;">Serializes thought steps into natural-language tokens in context window.</div>
+        </div>
+        """, unsafe_allow_html=True)
+        m1, m2 = st.columns(2)
+        with m1:
+            st.metric("Tokens Emitted", explicit_proxy.get('reasoning_tokens_emitted', 0))
+        with m2:
+            st.metric("Internal Updates", explicit_proxy.get('internal_state_updates', 0))
+        st.caption(f"📝 {explicit_proxy.get('description', '')}")
         
     with col2:
-        st.markdown("**Mode B: Latent Reasoning**")
-        st.metric("Reasoning Tokens Emitted", latent_proxy.get('reasoning_tokens_emitted', 0))
-        st.metric("Internal State Updates", latent_proxy.get('internal_state_updates', 0))
+        st.markdown("""
+        <div style="border: 1px solid #bbf7d0; background-color: #f0fdf4; border-radius: 8px; padding: 1rem; margin-bottom: 0.5rem;">
+            <div style="font-weight: 700; color: #15803d; margin-bottom: 0.5rem; font-size: 1.05rem;">
+                Mode B: Latent / Iterative State
+            </div>
+            <div style="font-size: 0.88rem; color: #14532d;">Refines continuous vector representation across recurrence rounds.</div>
+        </div>
+        """, unsafe_allow_html=True)
+        m3, m4 = st.columns(2)
+        with m3:
+            st.metric("Tokens Emitted", latent_proxy.get('reasoning_tokens_emitted', 0))
+        with m4:
+            st.metric("Internal Updates", latent_proxy.get('internal_state_updates', 0))
         if 'total_ops' in latent_proxy:
-            st.metric("Approx. Operations", f"{latent_proxy['total_ops']:,}")
-        st.info(latent_proxy.get('description', ''))
+            st.caption(f"⚙️ Approx. Operations: **{latent_proxy['total_ops']:,} FLOPs** | {latent_proxy.get('description', '')}")
+        else:
+            st.caption(f"⚙️ {latent_proxy.get('description', '')}")
     
     st.markdown("""
-    **Key Insight:** Explicit reasoning emits intermediate tokens (visible, costly per token). 
-    Latent reasoning performs internal state updates (invisible, cost scales with rounds R, not token length).
+    > **Fundamental Trade-off:**
+    > - **Mode A (CoT):** Highly interpretable; every intermediate step is readable text. Cost scales with sequence length ($O(N^2)$ attention memory/KV-cache growth) and latency increases with every token emitted.
+    > - **Mode B (Latent):** Zero sequence growth; internal state remains fixed-size ($d$). Computation is controlled by recurrence depth ($R$), but intermediate reasoning cannot be directly read as natural language.
     """)

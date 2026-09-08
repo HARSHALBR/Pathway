@@ -4,116 +4,138 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import streamlit as st
 import matplotlib.pyplot as plt
 from models.transformer_demo import TinyTransformer
-from components.attention_visualizer import plot_matrix, plot_attention_heatmap
+from components.ui_theme import inject_custom_css, render_header, render_badge, render_equation_card
+from components.attention_visualizer import plot_matrix
 
-st.title('Transformer Foundations')
-st.markdown('Before we can contrast explicit and latent reasoning, we need to understand the basic operations of a Transformer block.')
+st.set_page_config(page_title="01 Transformer Foundations", page_icon="🧬", layout="wide")
+inject_custom_css()
 
-col1, col2 = st.columns([1, 2])
+render_header(
+    title="Chapter 01: Transformer Foundations",
+    subtitle="Deconstructing raw natural language into numerical tokens, dense embeddings, and positional matrices.",
+    badge=render_badge("live") + render_badge("toy")
+)
 
-with col1:
-    st.subheader('Concept Glossary')
-    with st.expander('Token, Token ID, Vocabulary'):
-        st.write('Text is split into discrete chunks (tokens), mapped to numbers (IDs) from a known dictionary (vocabulary).')
-    with st.expander('Token Embedding, Embedding Dimension'):
-        st.write('Each Token ID is converted to a vector of continuous numbers of a fixed size (Embedding Dimension).')
-    with st.expander('Positional Information'):
-        st.write('Transformers process all tokens simultaneously. Positional encoding adds sequence order information to the embeddings.')
-    with st.expander('Query, Key, Value'):
-        st.write('Linear projections of the input used to determine how tokens relate to one another.')
-    with st.expander('Self-Attention, Attention Weights'):
-        st.write('The mechanism by which each token aggregates information from other tokens based on relevance (attention weights).')
-    with st.expander('Feed-Forward Network'):
-        st.write('A neural network applied independently to each position to process the aggregated information.')
-    with st.expander('Residual Connection, Layer Normalization'):
-        st.write('Techniques to stabilize training by bypassing transformations and normalizing activations.')
-    with st.expander('Transformer Block'):
-        st.write('A single unit consisting of self-attention followed by a feed-forward network, both with residual connections and layer norm.')
-    with st.expander('Autoregressive next-token prediction'):
-        st.write('The process of generating text one token at a time, where each new token becomes part of the input for predicting the next.')
+st.markdown("""
+Before contrasting explicit and latent reasoning, we must look inside the computational engine of modern language models:
+**The Transformer**. Language models cannot directly process text; every word must undergo a multi-stage transformation into numbers.
+""")
 
-with col2:
-    st.subheader('Interactive Demo')
-    sentence = st.text_input('Input Sentence', value='the cat sleeps')
-    
-    if st.button('Run Transformer'):
-        try:
-            model = TinyTransformer(d_model=4, seed=42)
-            out = model.forward(sentence)
-            
-            st.markdown('**a. Tokens and Token IDs**')
-            st.write({'Tokens': out['tokens'], 'Token IDs': out['token_ids']})
-            
-            st.markdown('**b. Embedding matrix X**')
-            st.latex(r'X \in \mathbb{R}^{L \times d}')
-            fig_X = plot_matrix(out['X'], title='Embedding Matrix X')
-            st.pyplot(fig_X)
-            plt.close(fig_X)
-            
-            st.markdown('**c. Positional encoding P**')
-            fig_P = plot_matrix(out['P'], title='Positional Encoding P')
-            st.pyplot(fig_P)
-            plt.close(fig_P)
-            
-            st.markdown('**d. H0 = X + P**')
-            st.latex(r'H_0 = X + P')
-            fig_H0 = plot_matrix(out['H0'], title='H0 Matrix')
-            st.pyplot(fig_H0)
-            plt.close(fig_H0)
-            
-            st.markdown('**e. Weight matrices W_Q, W_K, W_V**')
-            c1, c2, c3 = st.columns(3)
-            with c1:
-                fig = plot_matrix(out['W_Q'], title='W_Q')
-                st.pyplot(fig)
-                plt.close(fig)
-            with c2:
-                fig = plot_matrix(out['W_K'], title='W_K')
-                st.pyplot(fig)
-                plt.close(fig)
-            with c3:
-                fig = plot_matrix(out['W_V'], title='W_V')
-                st.pyplot(fig)
-                plt.close(fig)
-                
-            st.markdown('**f. Q, K, V matrices**')
-            st.latex(r'Q = H_0 W_Q, \quad K = H_0 W_K, \quad V = H_0 W_V')
-            st.latex(r'Q \in \mathbb{R}^{L \times d_k}')
-            c1, c2, c3 = st.columns(3)
-            with c1:
-                fig = plot_matrix(out['Q'], title='Q Matrix')
-                st.pyplot(fig)
-                plt.close(fig)
-            with c2:
-                fig = plot_matrix(out['K'], title='K Matrix')
-                st.pyplot(fig)
-                plt.close(fig)
-            with c3:
-                fig = plot_matrix(out['V'], title='V Matrix')
-                st.pyplot(fig)
-                plt.close(fig)
-                
-            st.markdown('**g. Score matrix QK^T/sqrt(d_k)**')
-            st.latex(r'\frac{QK^T}{\sqrt{d_k}}')
-            fig_scores = plot_matrix(out['scores'], title='Score Matrix')
-            st.pyplot(fig_scores)
-            plt.close(fig_scores)
-            
-            st.markdown('**h. Attention weights after softmax**')
-            st.latex(r'\text{Attention}(Q,K,V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right) V')
-            fig_att = plot_attention_heatmap(out['attention_weights'], out['tokens'])
-            st.pyplot(fig_att)
-            plt.close(fig_att)
-            
-            st.markdown('**i. Attention output**')
-            fig_att_out = plot_matrix(out['attention_output'], title='Attention Output')
-            st.pyplot(fig_att_out)
-            plt.close(fig_att_out)
-            
-            st.markdown('**j. After residual + FFN**')
-            fig_final = plot_matrix(out['residual_2'], title='Final Block Output')
-            st.pyplot(fig_final)
-            plt.close(fig_final)
-            
-        except Exception as e:
-            st.error(f'Error running Transformer demo: {e}')
+# Setup model
+@st.cache_resource
+def load_transformer():
+    return TinyTransformer(d_model=4, seed=42)
+
+model = load_transformer()
+
+st.markdown("### 1. Interactive Tokenization & Embedding Experiment")
+st.markdown("Select a sample sentence or type your own using our educational vocabulary:")
+
+col_in1, col_in2 = st.columns([2, 1])
+with col_in1:
+    preset = st.selectbox(
+        "Example Sequences",
+        ["the cat sleeps", "the dog runs", "the cat chased the mouse", "a big bird sits on mat"]
+    )
+with col_in2:
+    sentence = st.text_input("Active Sentence", value=preset)
+
+# Run live computation
+out = model.forward(sentence)
+tokens = out['tokens']
+token_ids = out['token_ids']
+L = len(tokens)
+
+st.markdown("#### Click a Token to Inspect its Internal Representation:")
+selected_idx = st.radio(
+    "Select Token:",
+    range(L),
+    format_func=lambda i: f"Token #{i+1}: [{tokens[i]}] (ID: {token_ids[i]})",
+    horizontal=True
+)
+
+sel_token = tokens[selected_idx]
+sel_id = token_ids[selected_idx]
+sel_vec = out['X'][selected_idx]
+sel_pos = out['P'][selected_idx]
+sel_h0 = out['H0'][selected_idx]
+
+col_tok1, col_tok2, col_tok3 = st.columns(3)
+
+with col_tok1:
+    st.markdown(f"""
+    <div class="lab-card" style="border-left: 4px solid #3b82f6;">
+        <span class="badge badge-live">Live Vector</span>
+        <h4 style="margin: 0.35rem 0 0.2rem 0;">Token: "{sel_token}"</h4>
+        <p style="color: #64748b; font-size: 0.88rem; margin-bottom: 0.5rem;">Vocabulary Index ID: <code>{sel_id}</code></p>
+        <strong>Embedding Vector (X):</strong>
+        <pre style="background: #f1f5f9; padding: 0.5rem; border-radius: 4px; font-size: 0.85rem;">[{", ".join([f"{v:+.3f}" for v in sel_vec])}]</pre>
+        <span style="font-size: 0.8rem; color: #475569;">Embedding Dimension d = 4</span>
+    </div>
+    """, unsafe_allow_html=True)
+
+with col_tok2:
+    st.markdown(f"""
+    <div class="lab-card" style="border-left: 4px solid #8b5cf6;">
+        <span class="badge badge-live">Live Vector</span>
+        <h4 style="margin: 0.35rem 0 0.2rem 0;">Position: #{selected_idx + 1}</h4>
+        <p style="color: #64748b; font-size: 0.88rem; margin-bottom: 0.5rem;">Index in Sequence (0 to {L-1})</p>
+        <strong>Positional Vector (P):</strong>
+        <pre style="background: #f1f5f9; padding: 0.5rem; border-radius: 4px; font-size: 0.85rem;">[{", ".join([f"{v:+.3f}" for v in sel_pos])}]</pre>
+        <span style="font-size: 0.8rem; color: #475569;">Injected sequence order vector</span>
+    </div>
+    """, unsafe_allow_html=True)
+
+with col_tok3:
+    st.markdown(f"""
+    <div class="lab-card" style="border-left: 4px solid #10b981;">
+        <span class="badge badge-live">Live Vector</span>
+        <h4 style="margin: 0.35rem 0 0.2rem 0;">Input Representation (H₀)</h4>
+        <p style="color: #64748b; font-size: 0.88rem; margin-bottom: 0.5rem;">Sum: H₀ = X + P</p>
+        <strong>Initial Hidden State:</strong>
+        <pre style="background: #f1f5f9; padding: 0.5rem; border-radius: 4px; font-size: 0.85rem;">[{", ".join([f"{v:+.3f}" for v in sel_h0])}]</pre>
+        <span style="font-size: 0.8rem; color: #475569;">Fed into Self-Attention layers</span>
+    </div>
+    """, unsafe_allow_html=True)
+
+st.markdown("---")
+
+st.markdown("### 2. Full Sequence Matrix Deconstruction")
+st.markdown("Observe the full sequence matrices $X, P, H_0 \\in \\mathbb{R}^{L \\times d}$ computed live:")
+
+render_equation_card(
+    title="Positional Embedding Addition",
+    latex_eq=r"H_0 = X + P \quad \text{where } X, P \in \mathbb{R}^{L \times d}",
+    plain_english="The Transformer has no intrinsic sense of sequence order. The learned positional vector P is added element-wise to the semantic token embedding X so the network knows where each word appears.",
+    numbers_example=f"For '{sel_token}': [{', '.join([f'{v:+.2f}' for v in sel_vec])}] + [{', '.join([f'{v:+.2f}' for v in sel_pos])}] = [{', '.join([f'{v:+.2f}' for v in sel_h0])}]"
+)
+
+tab_m1, tab_m2, tab_m3 = st.tabs(["Combined Input Matrix (H₀)", "Token Embeddings Matrix (X)", "Positional Encodings (P)"])
+
+with tab_m1:
+    st.caption("🟢 LIVE COMPUTATION — Each row represents a token's complete initial representation fed into attention.")
+    fig_h0 = plot_matrix(out['H0'], title="Input Matrix H₀ = X + P", row_labels=[f"{t} (#{i})" for i, t in enumerate(tokens)])
+    st.pyplot(fig_h0)
+    plt.close(fig_h0)
+
+with tab_m2:
+    st.caption("🟢 LIVE COMPUTATION — Pure semantic embeddings extracted from embedding table E.")
+    fig_x = plot_matrix(out['X'], title="Embedding Matrix X", row_labels=tokens)
+    st.pyplot(fig_x)
+    plt.close(fig_x)
+
+with tab_m3:
+    st.caption("🟢 LIVE COMPUTATION — Positional encodings indexed by sequence position.")
+    fig_p = plot_matrix(out['P'], title="Positional Matrix P", row_labels=[f"Pos {i}" for i in range(L)])
+    st.pyplot(fig_p)
+    plt.close(fig_p)
+
+st.markdown("---")
+st.markdown(r"""
+<div class="lab-card" style="background: #f8fafc;">
+    <strong>Key Takeaway:</strong> Words are mapped to high-dimensional points. In our educational model, each word is a 
+    vector in $\mathbb{R}^4$. In modern production LLMs, this embedding dimension $d$ is typically 4,096 or 8,192.
+    <br><br>
+    👉 <em>Next step: How do these static vectors interact with each other? Proceed to <strong>02 Attention Laboratory</strong>.</em>
+</div>
+""", unsafe_allow_html=True)
