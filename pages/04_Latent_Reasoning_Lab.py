@@ -196,19 +196,19 @@ st.markdown("---")
 # Mandatory Limitations / Break It Section
 st.markdown("### 4. ⚠️ Limitations & Failure Modes: Where Does This Break?")
 
-st.markdown(f"""
+st.markdown(rf"""
 <div class="lab-card" style="border-left: 5px solid #ef4444; background: #fff5f5;">
     <span class="badge badge-limitation">Scientific Honesty</span>
-    <h4 style="color: #991b1b; margin: 0.4rem 0;">Latent Reasoning is NOT a Silver Bullet</h4>
+    <h4 style="color: #991b1b; margin: 0.4rem 0;">Empirical Boundaries of Our Toy Educational Model</h4>
     <p style="font-size: 0.92rem; color: #7f1d1d;">
-        A major risk in AI research is over-claiming that continuous latent reasoning renders explicit Chain-of-Thought obsolete.
-        Our empirical experiments demonstrate clear failure boundaries:
+        This toy recurrent model exhibits clear empirical failure boundaries on these synthetic arithmetic cases. 
+        <strong>Crucially, behavior on this simplified toy task should not be generalized to large, production-scale neural architectures.</strong>
     </p>
     <ul style="font-size: 0.9rem; color: #7f1d1d; margin-bottom: 0.5rem;">
-        <li><strong>Distribution Shifts:</strong> The model was trained on prime moduli 7 and 11. Testing on moduli 13, 17, 19, or 23 causes accuracy to collapse toward random chance.</li>
-        <li><strong>Compositional Depth:</strong> Tasks with nested operations (Levels 3 & 4) frequently fail because a fixed continuous vector struggles to bind multiple intermediate variables without structured working memory.</li>
-        <li><strong>Diminishing Returns of R:</strong> Beyond a certain depth, additional recurrence rounds do not guarantee higher accuracy and can suffer from representation drift.</li>
-        <li><strong>Lack of Verifiability:</strong> When Mode B fails, the user cannot easily locate where the error occurred because no human-readable steps were emitted.</li>
+        <li><strong>Distribution Shifts:</strong> The toy weights were trained on prime moduli 7 and 11. Testing on moduli 13, 17, 19, or 23 causes accuracy to degrade toward random baseline guessing.</li>
+        <li><strong>Compositional Depth:</strong> Tasks with nested operations (Levels 3 & 4) frequently fail because a simple unstructured vector in $\mathbb{R}^{48}$ cannot reliably bind multiple intermediate variables.</li>
+        <li><strong>Diminishing Returns of R:</strong> For tasks beyond the model's capacity, increasing $R$ does not solve the problem and may lead to representation drift.</li>
+        <li><strong>Interpretability Trade-Off:</strong> When Mode B fails, a learner or auditor cannot inspect intermediate textual steps to diagnose where the calculation went wrong.</li>
     </ul>
 </div>
 """, unsafe_allow_html=True)

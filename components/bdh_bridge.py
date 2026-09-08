@@ -51,12 +51,14 @@ def render_bdh_interactive_simulator() -> None:
     """Renders the interactive educational Hebbian synaptic memory simulator."""
     st.markdown("""
     <div style="border: 1px solid #bfdbfe; background-color: #eff6ff; border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
-        <div style="font-weight: 700; color: #1e40af; font-size: 1.05rem; margin-bottom: 0.35rem;">
-            🧪 Interactive Synaptic Working Memory Simulator (4×4 Hebbian Toy Model)
+        <span class="badge badge-toy">Conceptual / Simplified Hebbian Memory Abstraction</span>
+        <div style="font-weight: 700; color: #1e40af; font-size: 1.05rem; margin-top: 0.35rem; margin-bottom: 0.35rem;">
+            🧪 Outer-Product Associative Memory Simulation (4×4 Matrix)
         </div>
-        <div style="font-size: 0.9rem; color: #1e3a8a;">
-            BDH (Kosowski et al., 2025) replaces the static, growing KV-cache of Transformers with a 
-            <strong>fixed-size dynamic synaptic state matrix</strong> updated via Hebbian plasticity.
+        <div style="font-size: 0.9rem; color: #1e3a8a; line-height: 1.45;">
+            This simplified simulator illustrates the idea of persistent state updated through an outer-product-style memory mechanism. 
+            It is inspired by the mathematical ideas discussed in the BDH literature (Kosowski et al., 2025) but is 
+            <strong>not an implementation of the complete BDH architecture</strong>.
         </div>
     </div>
     """, unsafe_allow_html=True)

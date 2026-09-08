@@ -54,7 +54,7 @@ Following the comprehensive audit in `CURRENT_IMPLEMENTATION_AUDIT.md`, the repo
 | `pages/03_Explicit_vs_Latent.py` | **NEW** | Added side-by-side execution pathways with structured computation proxies |
 | `pages/04_Latent_Reasoning_Lab.py` | **NEW** | Rebuilt core lab with reactive execution, state drill-down, and limitations section |
 | `pages/05_BDH_Case_Study.py` | **NEW** | Rebuilt research page with interactive Hebbian simulator and paper citations |
-| `pages/06_Assessment.py` | **NEW** | Expanded to 6 diagnostic questions with instant explanatory feedback |
+| `pages/06_Assessment.py` | **NEW** | Expanded to 8 diagnostic questions with instant explanatory feedback |
 | `components/ui_theme.py` | **NEW** | Academic CSS design system, equation cards, and evidence badges |
 | `components/attention_visualizer.py` | **MODIFIED** | Added token attention bar visualizer and enhanced matrix rendering |
 | `components/state_visualizer.py` | **MODIFIED** | Enhanced heatmaps, delta bars, and 2D PCA trajectory plots |
@@ -116,7 +116,7 @@ Following the comprehensive audit in `CURRENT_IMPLEMENTATION_AUDIT.md`, the repo
 | **State Vector Inspector** | Ch. 04 | Select round $S_t$ | Displays full 48-dimensional vector values and delta norm |
 | **$R$-Sweep Confidence Curve** | Ch. 04 | Click sweep button | Runs 10 forward passes across $R \in [1, 10]$ and plots ground truth probability |
 | **Hebbian Synaptic Memory** | Ch. 05 | Slider $\lambda \in [0, 1]$ | Computes $S_t = \lambda S_{t-1} + K_t^T V_t$ and readout $O_t = Q_t S_t$ live |
-| **Diagnostic Knowledge Test** | Ch. 06 | Select 6 diagnostic answers | Grades responses and provides immediate conceptual explanations |
+| **Diagnostic Knowledge Test** | Ch. 06 | Select 8 diagnostic answers | Grades responses and provides immediate conceptual explanations |
 
 ---
 
@@ -205,7 +205,7 @@ The application will open in your browser (typically at `http://localhost:8501`)
 | **Reproducible** | **DONE** | Deterministic random seeds, zero external API keys or GPU dependencies |
 | **Scientific Honesty** | **DONE** | Strict evidence badges (🟢/🟡/🔵/⚪/⚠️); explicit disclaimers on toy vs. BDH |
 | **Limitations Section** | **DONE** | Dedicated "Where Does This Break?" section in Chapter 04 exposing failure modes |
-| **60-Second Learning Test** | **DONE** | Chapter 06 features 6 diagnostic questions with immediate explanatory feedback |
+| **60-Second Learning Test** | **DONE** | Chapter 06 features 8 diagnostic questions with immediate explanatory feedback |
 
 ---
 

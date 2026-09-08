@@ -32,7 +32,7 @@ The laboratory follows a strict **DO → SEE → UNDERSTAND → EXPLAIN** pedago
 3. **`03 — Explicit vs. Latent Reasoning`**: Direct side-by-side pathway comparison: Mode A (CoT token emission) vs. Mode B (continuous state transitions) on synthetic modular arithmetic.
 4. **`04 — Latent Reasoning Laboratory`**: The core interactive sandbox. Reactive reasoning rounds slider ($R=1 \dots 10$), state evolution heatmaps, $\|\Delta S\|_2$ delta magnitude bar charts, 2D PCA state trajectories, $R$-sweep confidence curves, and a transparent "Where does this break?" limitations section.
 5. **`05 — BDH & BDH-CQ Research Frontier`**: Primary source grounding in Pathway's published research (Kosowski et al., 2025; Engdahl et al., 2026). Features an interactive 4×4 Hebbian synaptic state simulator ($S_t = \lambda S_{t-1} + K_t^T V_t$) and architectural comparison tables.
-6. **`06 — Challenge / 60-Second Test`**: 6 diagnostic conceptual questions providing instant mathematical and architectural feedback.
+6. **`06 — Challenge / 60-Second Test`**: 8 diagnostic conceptual questions providing instant mathematical and architectural feedback.
 
 ---
 

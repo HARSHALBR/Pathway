@@ -46,7 +46,9 @@ def render_computation_comparison(explicit_proxy: dict, latent_proxy: dict) -> N
             st.caption(f"⚙️ {latent_proxy.get('description', '')}")
     
     st.markdown("""
-    > **Fundamental Trade-off:**
-    > - **Mode A (CoT):** Highly interpretable; every intermediate step is readable text. Cost scales with sequence length ($O(N^2)$ attention memory/KV-cache growth) and latency increases with every token emitted.
-    > - **Mode B (Latent):** Zero sequence growth; internal state remains fixed-size ($d$). Computation is controlled by recurrence depth ($R$), but intermediate reasoning cannot be directly read as natural language.
+    > **Fundamental Conceptual Distinction (WHERE computation is represented):**
+    > - **Mode A (Explicit / CoT):** Intermediate reasoning is represented and emitted as *tokens* in the context window. Highly readable, but sequence length grows, expanding the KV-cache.
+    > - **Mode B (Latent State):** Intermediate reasoning is represented and refined inside an *internal continuous state vector* ($S_0 \to S_1 \to \dots \to S_R$). No sequence tokens emitted, but intermediate states are unreadable vectors.
+    >
+    > ⚠️ **Scientific Honesty Note:** These toy proxies illustrate the architectural mechanics on synthetic arithmetic. They are **not proof** of general speed, cost, or scaling superiority for full-scale real-world LLMs.
     """)

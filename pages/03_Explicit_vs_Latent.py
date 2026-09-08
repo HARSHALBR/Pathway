@@ -18,9 +18,13 @@ render_header(
 )
 
 st.markdown("""
-When a machine solves a multi-step problem, where should the intermediate computation happen?
-Currently, Large Language Models emit their reasoning as **visible text tokens**. 
-Latent reasoning explores an alternative: keeping intermediate reasoning **inside continuous state vectors**.
+When a system solves a multi-step problem, where should the intermediate computation happen?
+
+The essential conceptual distinction between Explicit Reasoning and Latent Reasoning is **WHERE the intermediate computation is represented**:
+- **Explicit Reasoning (Mode A):** Intermediate thoughts are externalized and serialized as **visible text tokens** in the context window.
+- **Latent Reasoning (Mode B):** Intermediate computation is internalized and performed inside a **continuous state vector** ($S_0 \\to S_1 \\to \\dots \\to S_R$) without emitting tokens.
+
+It is not simply that "one has more steps" — it is a structural difference in how memory and state are maintained across computational steps.
 """)
 
 # Setup models

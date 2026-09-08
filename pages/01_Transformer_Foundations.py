@@ -132,10 +132,17 @@ with tab_m3:
 
 st.markdown("---")
 st.markdown(r"""
-<div class="lab-card" style="background: #f8fafc;">
-    <strong>Key Takeaway:</strong> Words are mapped to high-dimensional points. In our educational model, each word is a 
-    vector in $\mathbb{R}^4$. In modern production LLMs, this embedding dimension $d$ is typically 4,096 or 8,192.
-    <br><br>
-    👉 <em>Next step: How do these static vectors interact with each other? Proceed to <strong>02 Attention Laboratory</strong>.</em>
+<div class="lab-card" style="background: #f8fafc; border-left: 4px solid #3b82f6;">
+    <h4 style="margin-top: 0; color: #1e3a8a;">Core Takeaway: Vocabulary Size ($V$) vs. Embedding Dimension ($d$)</h4>
+    <p style="font-size: 0.92rem; color: #334155; margin-bottom: 0.5rem;">
+        These are two fundamentally different concepts in Transformer architecture:
+    </p>
+    <ul style="font-size: 0.9rem; color: #334155; margin-bottom: 0.75rem;">
+        <li><strong>Vocabulary Size ($V = 24$):</strong> The total number of distinct words recognized by the model dictionary.</li>
+        <li><strong>Embedding Dimension ($d = 4$):</strong> The number of continuous numerical features used to represent each word ($E \in \mathbb{R}^{V \times d}$).</li>
+    </ul>
+    <p style="font-size: 0.88rem; color: #64748b; margin-bottom: 0;">
+        💡 <em>Note:</em> We deliberately use $d=4$ so every matrix and activation is fully inspectable on screen. In production frontier LLMs, $V$ is typically 32,000 to 128,000 and $d$ is 4,096 or 8,192.
+    </p>
 </div>
 """, unsafe_allow_html=True)
