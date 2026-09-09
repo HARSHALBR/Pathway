@@ -101,18 +101,33 @@ IITKGP_V2/
 
 ## 🚀 How to Run Locally
 
+### Option A: Unified Launcher (Primary Experience)
 ```bash
 # 1. Clone the repository
 git clone https://github.com/HARSHALBR/Pathway.git
 cd Pathway
 
-# 2. Install lightweight dependencies
+# 2. Launch FastAPI backend + React frontend concurrently
+./start.sh
+```
+- **React Web Application:** `http://localhost:5173`
+- **FastAPI Computational API:** `http://127.0.0.1:8000`
+- **Interactive API Documentation:** `http://127.0.0.1:8000/docs`
+
+### Option B: Manual Multi-Terminal Launch
+```bash
+# Terminal 1: Computational Backend
 pip install -r requirements.txt
+python3 -m uvicorn api.server:app --host 127.0.0.1 --port 8000
 
-# 3. Run unit test suite (50 tests)
-pytest
+# Terminal 2: Interactive Frontend
+cd frontend
+npm install
+npm run dev
+```
 
-# 4. Launch interactive Streamlit application
+### Option C: Fallback / Reference Streamlit Interface
+```bash
 streamlit run main.py
 ```
 
