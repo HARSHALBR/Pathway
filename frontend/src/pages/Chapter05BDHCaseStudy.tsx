@@ -80,12 +80,45 @@ export const Chapter05BDHCaseStudy: React.FC<Props> = ({ onNextChapter }) => {
             </p>
           </div>
 
-          <button
-            onClick={() => setStep((prev) => prev + 1)}
-            className="px-3.5 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-mono font-semibold transition-colors"
-          >
-            Step to Next Token (Step #{step + 1})
-          </button>
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-mono text-slate-400">Incoming Pattern:</span>
+            {[
+              { id: 1, label: 'Semantic (cat ➔ pet)' },
+              { id: 2, label: 'Action (chased ➔ mouse)' },
+              { id: 3, label: 'Inhibitory (decay test)' },
+              { id: 4, label: 'Orthogonal step' }
+            ].map((p) => (
+              <button
+                key={p.id}
+                onClick={() => setStep(p.id)}
+                className={`px-2.5 py-1 rounded text-xs font-mono transition-colors cursor-pointer ${
+                  step === p.id
+                    ? 'bg-purple-600 text-white font-bold'
+                    : 'bg-slate-900 text-slate-300 border border-slate-800 hover:border-purple-600/50'
+                }`}
+              >
+                {p.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Incoming K and V Vectors Display */}
+        <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800 flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
+          <div>
+            <span className="text-emerald-400 block text-[10px] uppercase font-bold">Incoming Key Vector K_t ∈ ℝ⁴</span>
+            <span className="text-emerald-200">[{simData?.K_t.map(v => v.toFixed(2)).join(', ')}]</span>
+          </div>
+          <span className="text-slate-500 font-bold">⊗</span>
+          <div>
+            <span className="text-purple-400 block text-[10px] uppercase font-bold">Incoming Value Vector V_t ∈ ℝ⁴</span>
+            <span className="text-purple-200">[{simData?.V_t.map(v => v.toFixed(2)).join(', ')}]</span>
+          </div>
+          <span className="text-slate-500 font-bold">=</span>
+          <div>
+            <span className="text-indigo-400 block text-[10px] uppercase font-bold">Outer-Product Association ΔS = K_t^T · V_t</span>
+            <span className="text-indigo-200">4×4 instantaneous fast-weight matrix</span>
+          </div>
         </div>
 
         {/* Retention Slider */}
@@ -95,7 +128,7 @@ export const Chapter05BDHCaseStudy: React.FC<Props> = ({ onNextChapter }) => {
               Memory Retention Coefficient (λ = {decayLambda.toFixed(2)})
             </span>
             <span className="text-[11px] font-mono text-slate-400">
-              {decayLambda === 0 ? 'Rapid Forgetting (λ=0)' : decayLambda === 1 ? 'Infinite Retention (λ=1)' : 'Exponential Decay'}
+              {decayLambda === 0 ? 'Rapid Forgetting (λ=0: previous state erased)' : decayLambda === 1 ? 'Infinite Retention (λ=1: exact accumulation)' : 'Exponential Decay'}
             </span>
           </div>
           <input
@@ -109,7 +142,7 @@ export const Chapter05BDHCaseStudy: React.FC<Props> = ({ onNextChapter }) => {
           />
           <div className="flex justify-between text-[10px] font-mono text-slate-500">
             <span>0.0 (Only new associations retained)</span>
-            <span>0.5</span>
+            <span>0.5 (Balanced plastic decay)</span>
             <span>1.0 (Exact accumulation of all history)</span>
           </div>
         </div>
@@ -276,6 +309,58 @@ export const Chapter05BDHCaseStudy: React.FC<Props> = ({ onNextChapter }) => {
               <span className="text-xl font-bold text-amber-400 font-mono">$0.0007</span>
               <span className="text-[10px] text-slate-500 block">per task evaluated</span>
             </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Crucial Demarcation: Toy vs Real BDH vs BDH-CQ */}
+      <div className="lab-glass-card p-6 border-slate-800 space-y-4">
+        <h3 className="text-base font-bold text-white flex items-center gap-2">
+          <ShieldCheck className="w-5 h-5 text-indigo-400" />
+          <span>Scientific Demarcation: Our Toy Simulator vs. Real BDH vs. BDH-CQ</span>
+        </h3>
+        <p className="text-xs text-slate-300">
+          To ensure strict scientific integrity, this table explicitly demarcates what is shared conceptually versus what is simplified:
+        </p>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+          {/* Column 1: Toy Model */}
+          <div className="p-4 rounded-xl bg-slate-900/90 border border-indigo-500/40 space-y-2">
+            <span className="text-xs font-mono font-bold text-indigo-400 uppercase block">1. Our Educational Simulator</span>
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-indigo-950 text-indigo-300 border border-indigo-800">
+              🟡 TOY ABSTRACTION
+            </span>
+            <ul className="text-slate-300 space-y-1.5 list-disc pl-4 pt-1">
+              <li><strong>Concept Shared:</strong> Outer-product fast weights update a persistent matrix without sequence token expansion.</li>
+              <li><strong>Simplification:</strong> Single 4×4 educational matrix; scalar decay λ; synthetic arithmetic vectors.</li>
+              <li><strong>Purpose:</strong> Transparent interactive inspection of matrix mechanics for learners.</li>
+            </ul>
+          </div>
+
+          {/* Column 2: Real BDH */}
+          <div className="p-4 rounded-xl bg-slate-900/90 border border-blue-500/40 space-y-2">
+            <span className="text-xs font-mono font-bold text-blue-400 uppercase block">2. Real BDH (Pathway 2025)</span>
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-blue-950 text-blue-300 border border-blue-800">
+              ⚪ PRIMARY RESEARCH
+            </span>
+            <ul className="text-slate-300 space-y-1.5 list-disc pl-4 pt-1">
+              <li><strong>Core Contribution:</strong> Continuous-time Hebbian plasticity replaces the growing KV-cache.</li>
+              <li><strong>Dynamics:</strong> dσ_ij/dt = η Y_i X_j - λ σ_ij operating across multi-layer neural networks.</li>
+              <li><strong>Theoretical Proof:</strong> Establishes mathematical equivalence between Transformers and synaptic brain models.</li>
+            </ul>
+          </div>
+
+          {/* Column 3: BDH-CQ */}
+          <div className="p-4 rounded-xl bg-slate-900/90 border border-purple-500/40 space-y-2">
+            <span className="text-xs font-mono font-bold text-purple-400 uppercase block">3. BDH-CQ (Pathway 2026)</span>
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-purple-950 text-purple-300 border border-purple-800">
+              🔵 PUBLISHED BENCHMARK
+            </span>
+            <ul className="text-slate-300 space-y-1.5 list-disc pl-4 pt-1">
+              <li><strong>Core Contribution:</strong> Context-Query (CQ) separation for in-context latent reasoning.</li>
+              <li><strong>Latent Loop:</strong> Continuous state recurrence z^(r) = R(z^(r-1), M_K, ψ(x*)) with zero intermediate tokens.</li>
+              <li><strong>ARC-AGI-1 Result:</strong> 29.5% pass@2 at 150M parameter scale and $0.0007 cost per task.</li>
+            </ul>
           </div>
         </div>
       </div>

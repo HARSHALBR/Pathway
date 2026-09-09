@@ -14,6 +14,7 @@ export const Chapter01Foundations: React.FC<Props> = ({ onNextChapter }) => {
   const [data, setData] = useState<TransformerForwardResponse | null>(null);
   const [selectedTokenIdx, setSelectedTokenIdx] = useState(1); // 'cat'
   const [hoveredCell, setHoveredCell] = useState<{ row: number; col: number } | null>(null);
+  const [activePipelineStage, setActivePipelineStage] = useState<number>(0);
 
   useEffect(() => {
     let isMounted = true;
@@ -211,6 +212,198 @@ export const Chapter01Foundations: React.FC<Props> = ({ onNextChapter }) => {
             </p>
           </div>
         </div>
+      </div>
+
+      {/* 12-Stage Micro-Level Computational Pipeline Map */}
+      <div className="lab-glass-card p-6 border-slate-800 space-y-5">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <h3 className="text-base font-bold text-white flex items-center gap-2">
+              <Layers className="w-4 h-4 text-indigo-400" />
+              <span>Full Micro-Level Transformer Pipeline: From Text to LayerNorm</span>
+            </h3>
+            <p className="text-xs text-slate-400 mt-0.5">
+              Click any stage in the computational chain to inspect its input, exact mathematical operation, output shape, and meaning.
+            </p>
+          </div>
+          <span className="text-xs font-mono text-indigo-300 bg-indigo-950/70 px-2.5 py-1 rounded border border-indigo-700/50">
+            Micro-Stage {activePipelineStage + 1} of 12
+          </span>
+        </div>
+
+        {/* Pipeline Stepper Buttons */}
+        <div className="flex flex-wrap gap-1.5 p-2 bg-slate-950/80 rounded-xl border border-slate-800">
+          {[
+            { id: 0, label: '1. Text', sub: 'String' },
+            { id: 1, label: '2. Tokenize', sub: 'Subwords' },
+            { id: 2, label: '3. Token IDs', sub: 'Integers' },
+            { id: 3, label: '4. Embedding', sub: 'X ∈ ℝ⁴' },
+            { id: 4, label: '5. Position P', sub: 'P ∈ ℝ⁴' },
+            { id: 5, label: '6. H₀ = X+P', sub: 'Initial State' },
+            { id: 6, label: '7. Q, K, V', sub: 'Projections' },
+            { id: 7, label: '8. Scores S', sub: 'QKᵀ / √d' },
+            { id: 8, label: '9. Softmax A', sub: 'Weights' },
+            { id: 9, label: '10. Value Agg', sub: 'A · V' },
+            { id: 10, label: '11. Residual', sub: 'H₀ + Attn' },
+            { id: 11, label: '12. LayerNorm', sub: 'LN(z)' },
+          ].map((stg) => (
+            <button
+              key={stg.id}
+              onClick={() => setActivePipelineStage(stg.id)}
+              className={`px-3 py-1.5 rounded-lg text-xs font-mono transition-all cursor-pointer ${
+                activePipelineStage === stg.id
+                  ? 'bg-indigo-600 text-white font-bold border border-indigo-400 shadow-sm'
+                  : 'bg-slate-900/80 text-slate-300 border border-slate-800/80 hover:border-slate-700'
+              }`}
+            >
+              <div>{stg.label}</div>
+              <div className="text-[9px] text-slate-400 font-normal">{stg.sub}</div>
+            </button>
+          ))}
+        </div>
+
+        {/* Selected Stage Detail Card */}
+        {(() => {
+          const stagesInfo = [
+            {
+              title: "Stage 1: Raw Natural Language Input",
+              input: 'Human sentence: "The cat sat on the mat"',
+              operation: "Character stream ingestion & normalization",
+              output: `String sequence (length ${sentence.length} chars)`,
+              shape: "Scalar string",
+              meaning: "Computers cannot directly multiply words. Text must be structured into discrete categorical units.",
+              color: "border-indigo-500/50 bg-indigo-950/20 text-indigo-300"
+            },
+            {
+              title: "Stage 2: Tokenization",
+              input: `String "${sentence}"`,
+              operation: `Wordpiece / BPE lookup against vocabulary V = ${data?.vocab_size || 24}`,
+              output: `Tokens: [${tokens.map(t => `"${t}"`).join(', ')}]`,
+              shape: `List of string tokens (L = ${tokens.length})`,
+              meaning: "Maps raw text characters into discrete vocabulary tokens.",
+              color: "border-indigo-500/50 bg-indigo-950/20 text-indigo-300"
+            },
+            {
+              title: "Stage 3: Token ID Indexing",
+              input: `Tokens: [${tokens.map(t => `"${t}"`).join(', ')}]`,
+              operation: "Dict lookup: token_id = VOCAB[token]",
+              output: `Token IDs: [${tokenIds.join(', ')}]`,
+              shape: `Array of integers (L = ${tokens.length})`,
+              meaning: "Each vocabulary word is assigned an index from 0 to V-1 (0 to 23).",
+              color: "border-indigo-500/50 bg-indigo-950/20 text-indigo-300"
+            },
+            {
+              title: "Stage 4: Semantic Embedding Lookup",
+              input: `Token IDs [${tokenIds.join(', ')}] and Weight Matrix E ∈ ℝ²⁴ˣ⁴`,
+              operation: "Row slicing: X[i] = E[token_ids[i]]",
+              output: `Semantic matrix X (row for "${tokens[selectedTokenIdx]}": [${currentX.map(v => v.toFixed(2)).join(', ')}])`,
+              shape: `Matrix X ∈ ℝ^(${tokens.length} × 4)`,
+              meaning: "Extracts static semantic meaning coordinates in continuous space.",
+              color: "border-indigo-500/50 bg-indigo-950/20 text-indigo-300"
+            },
+            {
+              title: "Stage 5: Positional Encoding Injection",
+              input: `Position indices [0, 1, ..., ${tokens.length - 1}] and P_matrix ∈ ℝ¹⁰ˣ⁴`,
+              operation: "Position slice: P = P_matrix[:L]",
+              output: `Position matrix P (row for pos ${selectedTokenIdx}: [${currentP.map(v => v.toFixed(2)).join(', ')}])`,
+              shape: `Matrix P ∈ ℝ^(${tokens.length} × 4)`,
+              meaning: "Provides spatial order information so word order matters.",
+              color: "border-emerald-500/50 bg-emerald-950/20 text-emerald-300"
+            },
+            {
+              title: "Stage 6: Initial Hidden State Formation",
+              input: `Embedding X ∈ ℝ^(${tokens.length}×4) and Position P ∈ ℝ^(${tokens.length}×4)`,
+              operation: "Elementwise addition: H₀ = X + P",
+              output: `Hidden matrix H₀ (row for pos ${selectedTokenIdx}: [${currentH0.map(v => v.toFixed(2)).join(', ')}])`,
+              shape: `Matrix H₀ ∈ ℝ^(${tokens.length} × 4)`,
+              meaning: "Combined state carrying both semantic meaning and positional sequence order.",
+              color: "border-amber-500/50 bg-amber-950/20 text-amber-300"
+            },
+            {
+              title: "Stage 7: Linear Projections (Q, K, V)",
+              input: `Hidden State H₀ ∈ ℝ^(${tokens.length}×4) and weight matrices W_Q, W_K, W_V ∈ ℝ⁴ˣ⁴`,
+              operation: "Matrix multiplications: Q = H₀ W_Q, K = H₀ W_K, V = H₀ W_V",
+              output: `Projections Q, K, V each in ℝ^(${tokens.length} × 4)`,
+              shape: `Q ∈ ℝ^(${tokens.length}×4), K ∈ ℝ^(${tokens.length}×4), V ∈ ℝ^(${tokens.length}×4)`,
+              meaning: "Specializes the representation into Queries (seeking info), Keys (indexing info), and Values (transmitting info).",
+              color: "border-purple-500/50 bg-purple-950/20 text-purple-300"
+            },
+            {
+              title: "Stage 8: Scaled Dot-Product Attention Scores",
+              input: `Queries Q ∈ ℝ^(${tokens.length}×4) and Keys K ∈ ℝ^(${tokens.length}×4)`,
+              operation: "Score matrix: S = Q Kᵀ / √d_k (where d_k = 4, √d_k = 2.0)",
+              output: `Raw score matrix S with shape (${tokens.length} × ${tokens.length})`,
+              shape: `S ∈ ℝ^(${tokens.length} × ${tokens.length})`,
+              meaning: "Measures mutual pairwise geometric compatibility between all tokens.",
+              color: "border-purple-500/50 bg-purple-950/20 text-purple-300"
+            },
+            {
+              title: "Stage 9: Softmax Attention Weights",
+              input: `Score matrix S ∈ ℝ^(${tokens.length}×${tokens.length})`,
+              operation: "Row-wise softmax: A_ij = exp(S_ij - max S_i) / Σ exp(S_ik - max S_i)",
+              output: `Attention probability matrix A (rows strictly sum to 1.0000)`,
+              shape: `A ∈ ℝ^(${tokens.length} × ${tokens.length})`,
+              meaning: "Converts compatibility scores into probability distributions over sequence keys.",
+              color: "border-purple-500/50 bg-purple-950/20 text-purple-300"
+            },
+            {
+              title: "Stage 10: Value Aggregation",
+              input: `Attention weights A ∈ ℝ^(${tokens.length}×${tokens.length}) and Values V ∈ ℝ^(${tokens.length}×4)`,
+              operation: "Weighted sum: Attn_Out = (A · V) W_O",
+              output: `Aggregated Value representation`,
+              shape: `Attn_Out ∈ ℝ^(${tokens.length} × 4)`,
+              meaning: "Blends information from other tokens according to their attention weights.",
+              color: "border-blue-500/50 bg-blue-950/20 text-blue-300"
+            },
+            {
+              title: "Stage 11: Residual Connection",
+              input: `Input H₀ ∈ ℝ^(${tokens.length}×4) and Attention Output Attn_Out ∈ ℝ^(${tokens.length}×4)`,
+              operation: "Skip-connection addition: H₁ = H₀ + Attn_Out",
+              output: `Residual state H₁`,
+              shape: `H₁ ∈ ℝ^(${tokens.length} × 4)`,
+              meaning: "Prevents gradient vanishing and preserves initial identity while incorporating contextual features.",
+              color: "border-emerald-500/50 bg-emerald-950/20 text-emerald-300"
+            },
+            {
+              title: "Stage 12: Layer Normalization (LN)",
+              input: `State z ∈ ℝ^(${tokens.length}×4)`,
+              operation: "Normalization: LN(z) = (z - μ) / √(σ² + ε)",
+              output: `Zero-mean, unit-variance normalized activations (mean ≈ 0.0, std ≈ 1.0)`,
+              shape: `Output ∈ ℝ^(${tokens.length} × 4)`,
+              meaning: "Stabilizes signal dynamics across forward and backward propagation.",
+              color: "border-teal-500/50 bg-teal-950/20 text-teal-300"
+            }
+          ];
+
+          const info = stagesInfo[activePipelineStage] || stagesInfo[0];
+          return (
+            <div className={`p-4 rounded-xl border ${info.color} space-y-2.5`}>
+              <div className="flex justify-between items-center">
+                <span className="text-sm font-bold text-white font-mono">{info.title}</span>
+                <span className="text-xs font-mono px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-slate-300">
+                  Shape: {info.shape}
+                </span>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-mono">
+                <div className="p-2.5 rounded bg-slate-950/80 border border-slate-800/80">
+                  <span className="text-slate-400 block text-[10px] uppercase font-sans">Input Data:</span>
+                  <span className="text-slate-200">{info.input}</span>
+                </div>
+                <div className="p-2.5 rounded bg-slate-950/80 border border-slate-800/80">
+                  <span className="text-slate-400 block text-[10px] uppercase font-sans">Mathematical Operation:</span>
+                  <span className="text-indigo-300 font-semibold">{info.operation}</span>
+                </div>
+              </div>
+              <div className="p-2.5 rounded bg-slate-950/80 border border-slate-800/80 text-xs font-mono">
+                <span className="text-slate-400 block text-[10px] uppercase font-sans">Output Result:</span>
+                <span className="text-emerald-300">{info.output}</span>
+              </div>
+              <p className="text-xs text-slate-300 italic pt-1">
+                💡 <strong>Plain-English Meaning:</strong> {info.meaning}
+              </p>
+            </div>
+          );
+        })()}
       </div>
 
       {/* Interactive Matrix Addition Table: X + P = H0 */}

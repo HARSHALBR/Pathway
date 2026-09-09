@@ -15,6 +15,7 @@ export const Chapter02AttentionLab: React.FC<Props> = ({ onNextChapter }) => {
   const [activeQueryIdx, setActiveQueryIdx] = useState(1); // 'cat'
   const [attentionData, setAttentionData] = useState<AttentionAnalyzeResponse | null>(null);
   const [hoveredCell, setHoveredCell] = useState<{ qIdx: number; kIdx: number } | null>(null);
+  const [selectedCell, setSelectedCell] = useState<{ qIdx: number; kIdx: number }>({ qIdx: 1, kIdx: 1 });
 
   useEffect(() => {
     runTransformerForward(sentence)
@@ -204,8 +205,9 @@ export const Chapter02AttentionLab: React.FC<Props> = ({ onNextChapter }) => {
                         key={kIdx}
                         onMouseEnter={() => setHoveredCell({ qIdx, kIdx })}
                         onMouseLeave={() => setHoveredCell(null)}
+                        onClick={() => setSelectedCell({ qIdx, kIdx })}
                         className={`w-16 h-12 rounded-lg flex flex-col items-center justify-center cursor-pointer transition-all border ${
-                          isHovered
+                          isHovered || (selectedCell.qIdx === qIdx && selectedCell.kIdx === kIdx)
                             ? 'border-white scale-110 shadow-lg z-10'
                             : 'border-slate-800 hover:border-indigo-400'
                         }`}
@@ -227,6 +229,72 @@ export const Chapter02AttentionLab: React.FC<Props> = ({ onNextChapter }) => {
             ))}
           </div>
         </div>
+
+        {/* Detailed Attention Cell Mathematical Inspector Card */}
+        {(() => {
+          const insp = hoveredCell || selectedCell;
+          const qIdx = insp.qIdx;
+          const kIdx = insp.kIdx;
+          const qTok = tokens[qIdx] || 'Query';
+          const kTok = tokens[kIdx] || 'Key';
+          const qVec = transformerData?.Q[qIdx] || [0, 0, 0, 0];
+          const kVec = transformerData?.K[kIdx] || [0, 0, 0, 0];
+          const vVec = transformerData?.V[kIdx] || [0, 0, 0, 0];
+          const rawDot = qVec.reduce((sum, qVal, i) => sum + qVal * (kVec[i] || 0), 0);
+          const scaledScore = rawDot / 2.0;
+          const attnWeight = weights[qIdx]?.[kIdx] || 0;
+          const weightedV = vVec.map((v) => v * attnWeight);
+
+          return (
+            <div className="p-5 rounded-xl bg-slate-900/90 border border-indigo-500/50 space-y-4">
+              <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-mono px-2 py-0.5 rounded bg-indigo-950 text-indigo-300 border border-indigo-700 font-bold">
+                    ACTIVE CELL INSPECTOR
+                  </span>
+                  <h4 className="text-sm font-bold text-white font-mono">
+                    Query #{qIdx} "{qTok}" ➔ Key #{kIdx} "{kTok}"
+                  </h4>
+                </div>
+                <span className="text-xs font-mono text-slate-400">
+                  (Click any cell in matrix above to lock inspection)
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 text-xs font-mono">
+                {/* Q Vector */}
+                <div className="p-3 rounded-lg bg-slate-950 border border-indigo-900/60 space-y-1">
+                  <span className="text-indigo-400 block text-[10px] font-sans uppercase font-bold">Query Vector Q({qTok})</span>
+                  <div className="text-indigo-200">[{qVec.map(v => v.toFixed(3)).join(', ')}]</div>
+                </div>
+
+                {/* K Vector */}
+                <div className="p-3 rounded-lg bg-slate-950 border border-emerald-900/60 space-y-1">
+                  <span className="text-emerald-400 block text-[10px] font-sans uppercase font-bold">Key Vector K({kTok})</span>
+                  <div className="text-emerald-200">[{kVec.map(v => v.toFixed(3)).join(', ')}]</div>
+                </div>
+
+                {/* Raw Dot Product & Scaling */}
+                <div className="p-3 rounded-lg bg-slate-950 border border-purple-900/60 space-y-1">
+                  <span className="text-purple-400 block text-[10px] font-sans uppercase font-bold">Dot Product & Scale (/√d_k)</span>
+                  <div className="text-purple-200">Q·K = {rawDot.toFixed(3)}</div>
+                  <div className="text-indigo-300 font-bold">S = {rawDot.toFixed(3)} / 2 = {scaledScore.toFixed(3)}</div>
+                </div>
+
+                {/* Normalized Weight & Weighted Value */}
+                <div className="p-3 rounded-lg bg-slate-950 border border-amber-900/60 space-y-1">
+                  <span className="text-amber-400 block text-[10px] font-sans uppercase font-bold">Softmax Weight A & Value Agg</span>
+                  <div className="text-emerald-400 font-bold text-sm">A = {attnWeight.toFixed(4)} ({Math.round(attnWeight * 100)}%)</div>
+                  <div className="text-amber-200 text-[10px]">A·V = [{weightedV.map(v => v.toFixed(3)).join(', ')}]</div>
+                </div>
+              </div>
+
+              <p className="text-xs text-slate-300 leading-relaxed italic bg-slate-950/60 p-2.5 rounded border border-slate-800">
+                💡 <strong>Why this weight?</strong> The dot product between Query vector "{qTok}" and Key vector "{kTok}" yields raw similarity {rawDot.toFixed(3)}. Dividing by √d_k = 2.0 scales it to {scaledScore.toFixed(3)}. When exponentiated and normalized against all tokens in the row via softmax, it allocates exactly <strong>{(attnWeight * 100).toFixed(1)}%</strong> of "{qTok}"'s contextual attention to the value information carried by "{kTok}".
+              </p>
+            </div>
+          );
+        })()}
       </div>
 
       {/* Equation Cards */}
