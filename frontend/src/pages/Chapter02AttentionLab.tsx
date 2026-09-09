@@ -13,9 +13,10 @@ export const Chapter02AttentionLab: React.FC<Props> = ({ onNextChapter }) => {
   const [sentence] = useState('The cat sat on the mat');
   const [transformerData, setTransformerData] = useState<TransformerForwardResponse | null>(null);
   const [activeQueryIdx, setActiveQueryIdx] = useState(1); // 'cat'
+  const [activeKeyIdx, setActiveKeyIdx] = useState(5); // 'mat'
   const [attentionData, setAttentionData] = useState<AttentionAnalyzeResponse | null>(null);
   const [hoveredCell, setHoveredCell] = useState<{ qIdx: number; kIdx: number } | null>(null);
-  const [selectedCell, setSelectedCell] = useState<{ qIdx: number; kIdx: number }>({ qIdx: 1, kIdx: 1 });
+  const [selectedCell, setSelectedCell] = useState<{ qIdx: number; kIdx: number }>({ qIdx: 1, kIdx: 5 });
 
   useEffect(() => {
     runTransformerForward(sentence)
@@ -61,37 +62,169 @@ export const Chapter02AttentionLab: React.FC<Props> = ({ onNextChapter }) => {
         </p>
       </div>
 
-      {/* Horizontal Token Selector as Query Driver */}
-      <div className="lab-glass-card p-5 space-y-4">
-        <div className="flex items-center justify-between">
-          <span className="text-xs font-mono uppercase tracking-wider text-slate-400 font-semibold flex items-center gap-2">
-            <Eye className="w-4 h-4 text-indigo-400" />
-            <span>Select Active Query Token:</span>
-          </span>
-          <span className="text-xs font-mono text-indigo-400">
-            Current Query: <strong>"{tokens[activeQueryIdx]}" (pos {activeQueryIdx})</strong>
+      {/* Interactive Query & Key Token Drivers */}
+      <div className="lab-glass-card p-5 space-y-5">
+        {/* Driver 1: Query Token A */}
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-mono uppercase tracking-wider text-indigo-400 font-semibold flex items-center gap-2">
+              <Eye className="w-4 h-4 text-indigo-400" />
+              <span>Select Query Token A (What is Looking):</span>
+            </span>
+            <span className="text-xs font-mono text-indigo-300">
+              Query A: <strong>"{tokens[activeQueryIdx]}" (pos {activeQueryIdx})</strong>
+            </span>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {tokens.map((tok, idx) => {
+              const isQuery = idx === activeQueryIdx;
+              return (
+                <button
+                  key={`q-${idx}`}
+                  onClick={() => {
+                    setActiveQueryIdx(idx);
+                    setSelectedCell({ qIdx: idx, kIdx: activeKeyIdx });
+                  }}
+                  className={`flex items-center gap-2 px-3.5 py-2 rounded-xl font-mono text-xs transition-all cursor-pointer border ${
+                    isQuery
+                      ? 'bg-gradient-to-r from-indigo-600 to-indigo-700 text-white font-bold border-indigo-400 shadow-md shadow-indigo-500/30 scale-105'
+                      : 'bg-slate-900/90 text-slate-300 border-slate-800 hover:border-slate-700'
+                  }`}
+                >
+                  <span className="text-[10px] text-slate-400 font-normal">#{idx}</span>
+                  <span className="text-xs tracking-wide">"{tok}"</span>
+                  {isQuery && <span className="text-[9px] px-1.5 py-0.2 rounded bg-indigo-950 text-indigo-200">Q</span>}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Driver 2: Key Token B */}
+        <div className="space-y-2 pt-3 border-t border-slate-800">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-mono uppercase tracking-wider text-emerald-400 font-semibold flex items-center gap-2">
+              <Layers className="w-4 h-4 text-emerald-400" />
+              <span>Select Key Token B (What is Being Evaluated):</span>
+            </span>
+            <span className="text-xs font-mono text-emerald-300">
+              Key B: <strong>"{tokens[activeKeyIdx]}" (pos {activeKeyIdx})</strong>
+            </span>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {tokens.map((tok, idx) => {
+              const isKey = idx === activeKeyIdx;
+              return (
+                <button
+                  key={`k-${idx}`}
+                  onClick={() => {
+                    setActiveKeyIdx(idx);
+                    setSelectedCell({ qIdx: activeQueryIdx, kIdx: idx });
+                  }}
+                  className={`flex items-center gap-2 px-3.5 py-2 rounded-xl font-mono text-xs transition-all cursor-pointer border ${
+                    isKey
+                      ? 'bg-gradient-to-r from-emerald-600 to-teal-700 text-white font-bold border-emerald-400 shadow-md shadow-emerald-500/30 scale-105'
+                      : 'bg-slate-900/90 text-slate-300 border-slate-800 hover:border-slate-700'
+                  }`}
+                >
+                  <span className="text-[10px] text-slate-400 font-normal">#{idx}</span>
+                  <span className="text-xs tracking-wide">"{tok}"</span>
+                  {isKey && <span className="text-[9px] px-1.5 py-0.2 rounded bg-emerald-950 text-emerald-200">K</span>}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
+      {/* Required Micro-Experiment: Pairwise Query-Key Computational Walkthrough */}
+      <div className="lab-glass-card p-6 border-l-4 border-l-indigo-500 space-y-4">
+        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
+          <div>
+            <span className="text-xs font-mono font-bold text-indigo-400 uppercase tracking-wider block">
+              Step-by-Step Attention Computation Walkthrough
+            </span>
+            <h3 className="text-sm md:text-base font-bold text-white">
+              Comparing Query #{activeQueryIdx} "{tokens[activeQueryIdx]}" with Key #{activeKeyIdx} "{tokens[activeKeyIdx]}"
+            </h3>
+          </div>
+          <span className="text-xs font-mono text-emerald-400 bg-emerald-950/60 px-2.5 py-1 rounded border border-emerald-800">
+            Softmax Attention Weight A[{activeQueryIdx},{activeKeyIdx}] = {((weights[activeQueryIdx]?.[activeKeyIdx] || 0) * 100).toFixed(1)}%
           </span>
         </div>
 
-        <div className="flex flex-wrap gap-2">
-          {tokens.map((tok, idx) => {
-            const isQuery = idx === activeQueryIdx;
-            return (
-              <button
-                key={idx}
-                onClick={() => setActiveQueryIdx(idx)}
-                className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-mono text-xs transition-all cursor-pointer border ${
-                  isQuery
-                    ? 'bg-gradient-to-r from-indigo-600 to-indigo-700 text-white font-bold border-indigo-400 shadow-md shadow-indigo-500/30 scale-105'
-                    : 'bg-slate-900/90 text-slate-300 border-slate-800 hover:border-slate-700'
-                }`}
-              >
-                <span className="text-[10px] text-slate-400 font-normal">#{idx}</span>
-                <span className="text-sm tracking-wide">"{tok}"</span>
-                {isQuery && <span className="text-[10px] px-1.5 py-0.2 rounded bg-indigo-950 text-indigo-200">QUERY</span>}
-              </button>
-            );
-          })}
+        {/* 3 computational columns: Projections -> Dot Product & Scale -> Softmax & Value Agg */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 font-mono text-xs">
+          {/* Step 1: Q and K Projections */}
+          <div className="p-3.5 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
+            <span className="text-[10px] font-sans font-bold text-indigo-400 uppercase block">1. Linear Projections</span>
+            <div className="text-slate-300 space-y-2">
+              <div>
+                <span className="text-indigo-300 font-bold">Q_{tokens[activeQueryIdx]} = H₀ · W_Q:</span>
+                <div className="text-[11px] text-indigo-200 mt-0.5">
+                  [{transformerData?.Q[activeQueryIdx]?.map(v => v.toFixed(2)).join(', ')}]
+                </div>
+              </div>
+              <div className="pt-1.5 border-t border-slate-900">
+                <span className="text-emerald-300 font-bold">K_{tokens[activeKeyIdx]} = H₀ · W_K:</span>
+                <div className="text-[11px] text-emerald-200 mt-0.5">
+                  [{transformerData?.K[activeKeyIdx]?.map(v => v.toFixed(2)).join(', ')}]
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Step 2: Dot Product & Scaling */}
+          <div className="p-3.5 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
+            <span className="text-[10px] font-sans font-bold text-purple-400 uppercase block">2. Dot Product & Scaling</span>
+            {(() => {
+              const q = transformerData?.Q[activeQueryIdx] || [0, 0, 0, 0];
+              const k = transformerData?.K[activeKeyIdx] || [0, 0, 0, 0];
+              const dot = q.reduce((acc, val, i) => acc + val * (k[i] || 0), 0);
+              const scaled = dot / 2.0;
+              return (
+                <div className="text-slate-300 space-y-1.5">
+                  <div className="text-[10px] text-slate-400 font-mono">
+                    q₁k₁ + q₂k₂ + q₃k₃ + q₄k₄
+                  </div>
+                  <div className="text-purple-300 font-bold text-xs">
+                    Q · K = {dot.toFixed(3)}
+                  </div>
+                  <div className="pt-1 border-t border-slate-900 text-indigo-300 text-xs">
+                    Score S = {dot.toFixed(3)} ÷ √4 = <strong className="text-white">{scaled.toFixed(3)}</strong>
+                  </div>
+                </div>
+              );
+            })()}
+          </div>
+
+          {/* Step 3: Softmax Distribution & Value Output */}
+          <div className="p-3.5 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
+            <span className="text-[10px] font-sans font-bold text-amber-400 uppercase block">3. Softmax & Value Output</span>
+            {(() => {
+              const w = weights[activeQueryIdx]?.[activeKeyIdx] || 0;
+              const v = transformerData?.V[activeKeyIdx] || [0, 0, 0, 0];
+              const weightedV = v.map(val => val * w);
+              return (
+                <div className="text-slate-300 space-y-1.5">
+                  <div className="text-emerald-400 font-bold text-xs">
+                    Attention Weight = {(w * 100).toFixed(1)}%
+                  </div>
+                  <div className="text-[11px] text-slate-400">
+                    V_{tokens[activeKeyIdx]}: [{v.map(val => val.toFixed(2)).join(', ')}]
+                  </div>
+                  <div className="pt-1 border-t border-slate-900 text-amber-300 text-[11px]">
+                    A · V = [{weightedV.map(val => val.toFixed(2)).join(', ')}]
+                  </div>
+                </div>
+              );
+            })()}
+          </div>
+        </div>
+
+        <div className="p-3.5 rounded-lg bg-slate-950/70 border border-slate-800 text-xs text-slate-300 leading-relaxed">
+          💡 <strong>Dynamic Explanation:</strong> The query is being compared against every key. The resulting softmax distribution determines how strongly this token uses each token's value.
+          Here, "{tokens[activeQueryIdx]}" allocates <strong>{((weights[activeQueryIdx]?.[activeKeyIdx] || 0) * 100).toFixed(1)}%</strong> of its contextual attention to the value representation provided by "{tokens[activeKeyIdx]}".
         </div>
       </div>
 
@@ -325,16 +458,21 @@ export const Chapter02AttentionLab: React.FC<Props> = ({ onNextChapter }) => {
         </p>
       </div>
 
-      {/* Transition to Next Chapter */}
-      <div className="flex justify-between items-center pt-6 border-t border-slate-800">
-        <div className="text-xs text-slate-400">
-          Next: Compare sequential Chain-of-Thought token generation against continuous internal state refinement.
+      {/* Storytelling Transition to Next Chapter */}
+      <div className="p-5 rounded-2xl bg-gradient-to-r from-indigo-950/40 via-slate-900 to-indigo-950/40 border border-indigo-700/40 flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div className="space-y-1 text-center sm:text-left">
+          <span className="text-[10px] font-mono uppercase tracking-widest text-indigo-400 font-bold block">
+            THE INTELLECTUAL JOURNEY: CHAPTER 02 ➔ CHAPTER 03
+          </span>
+          <p className="text-xs sm:text-sm text-slate-200 font-medium">
+            Attention lets tokens communicate. But reasoning sometimes requires more than one computational step.
+          </p>
         </div>
         <button
           onClick={onNextChapter}
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs tracking-wider uppercase transition-all shadow-md shadow-indigo-600/30 cursor-pointer"
+          className="shrink-0 inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs tracking-wider uppercase transition-all shadow-lg shadow-indigo-600/30 cursor-pointer"
         >
-          <span>Continue to Chapter 03: Explicit vs. Latent</span>
+          <span>Continue → Explicit vs Latent Reasoning</span>
           <ArrowRight className="w-4 h-4" />
         </button>
       </div>

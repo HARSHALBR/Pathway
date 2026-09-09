@@ -18,13 +18,19 @@ export const LandingPage: React.FC<Props> = ({ onStartLab }) => {
           <span>Interactive Computational & Pedagogical Laboratory</span>
         </div>
 
-        <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-white">
-          Latent Reasoning <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-emerald-400 to-teal-300">Laboratory</span>
+        <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-white space-y-1">
+          <span className="block font-mono text-xs uppercase tracking-widest text-indigo-400 font-bold mb-1">
+            PATHWAY RESEARCH LABORATORY
+          </span>
+          <span>Latent Reasoning <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-emerald-400 to-teal-300">Laboratory</span></span>
         </h1>
 
-        <p className="text-lg md:text-xl text-slate-300 max-w-3xl mx-auto font-normal leading-relaxed">
-          From token embeddings and self-attention mechanics to hidden-state reasoning, 
-          and the research frontier beyond standard Transformers.
+        <p className="text-base sm:text-lg text-slate-300 max-w-3xl mx-auto font-normal leading-relaxed">
+          From tokens and attention to hidden-state reasoning — and the research frontier beyond conventional token-by-token reasoning.
+        </p>
+
+        <p className="text-xs sm:text-sm font-mono text-indigo-300/90 font-medium">
+          The Central Question: <em>Why does machine reasoning have to be represented as generated text?</em>
         </p>
 
         <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
@@ -34,14 +40,76 @@ export const LandingPage: React.FC<Props> = ({ onStartLab }) => {
           <EvidenceBadge type="primary" />
         </div>
 
-        <div className="pt-4">
+        <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
           <button
             onClick={() => onStartLab(1)}
             className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-gradient-to-r from-indigo-600 to-emerald-600 text-white font-semibold text-base shadow-lg shadow-indigo-500/25 hover:from-indigo-500 hover:to-emerald-500 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer"
           >
-            <span>ENTER THE LAB</span>
+            <span>ENTER THE LAB (FULL CURRICULUM)</span>
             <ArrowRight className="w-5 h-5" />
           </button>
+        </div>
+
+        {/* 2-Minute Judge Walkthrough Banner */}
+        <div className="max-w-4xl mx-auto p-5 rounded-2xl bg-gradient-to-r from-slate-950 via-indigo-950/40 to-slate-950 border border-indigo-500/40 text-left space-y-3 shadow-xl">
+          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-indigo-900/40 pb-2">
+            <span className="text-xs font-mono font-bold text-indigo-300 uppercase flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              2-Minute Fast-Track Evaluator Tour
+            </span>
+            <span className="text-[11px] font-mono text-slate-400">Target Time: 120s</span>
+          </div>
+
+          <p className="text-xs text-slate-300 leading-relaxed">
+            Short on time? Follow this structured 5-step evaluation pathway to experience the complete computational progression:
+          </p>
+
+          <div className="grid grid-cols-1 sm:grid-cols-5 gap-2 pt-1 text-xs">
+            <button
+              onClick={() => onStartLab(1)}
+              className="p-2.5 rounded-lg bg-slate-900/90 border border-slate-800 hover:border-indigo-400 text-left transition-all cursor-pointer group"
+            >
+              <span className="text-[10px] font-mono text-indigo-400 block font-bold">0:00–0:20</span>
+              <span className="font-bold text-white block text-xs group-hover:text-indigo-300">1. Foundations</span>
+              <span className="text-[10px] text-slate-400 block mt-0.5">X + P = H₀ vectors</span>
+            </button>
+
+            <button
+              onClick={() => onStartLab(2)}
+              className="p-2.5 rounded-lg bg-slate-900/90 border border-slate-800 hover:border-emerald-400 text-left transition-all cursor-pointer group"
+            >
+              <span className="text-[10px] font-mono text-emerald-400 block font-bold">0:20–0:50</span>
+              <span className="font-bold text-white block text-xs group-hover:text-emerald-300">2. Attention</span>
+              <span className="text-[10px] text-slate-400 block mt-0.5">Q·K dot products</span>
+            </button>
+
+            <button
+              onClick={() => onStartLab(3)}
+              className="p-2.5 rounded-lg bg-slate-900/90 border border-slate-800 hover:border-amber-400 text-left transition-all cursor-pointer group"
+            >
+              <span className="text-[10px] font-mono text-amber-400 block font-bold">0:50–1:15</span>
+              <span className="font-bold text-white block text-xs group-hover:text-amber-300">3. Explicit vs Latent</span>
+              <span className="text-[10px] text-slate-400 block mt-0.5">Tokens vs S₀→S_R</span>
+            </button>
+
+            <button
+              onClick={() => onStartLab(4)}
+              className="p-2.5 rounded-lg bg-slate-900/90 border border-slate-800 hover:border-teal-400 text-left transition-all cursor-pointer group"
+            >
+              <span className="text-[10px] font-mono text-teal-400 block font-bold">1:15–1:40</span>
+              <span className="font-bold text-white block text-xs group-hover:text-teal-300">4. Latent Lab</span>
+              <span className="text-[10px] text-slate-400 block mt-0.5">R-slider & 2D PCA</span>
+            </button>
+
+            <button
+              onClick={() => onStartLab(5)}
+              className="p-2.5 rounded-lg bg-slate-900/90 border border-slate-800 hover:border-purple-400 text-left transition-all cursor-pointer group"
+            >
+              <span className="text-[10px] font-mono text-purple-400 block font-bold">1:40–2:00</span>
+              <span className="font-bold text-white block text-xs group-hover:text-purple-300">5. BDH Memory</span>
+              <span className="text-[10px] text-slate-400 block mt-0.5">λ decay & fast weights</span>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -175,36 +243,42 @@ export const LandingPage: React.FC<Props> = ({ onStartLab }) => {
             {
               id: 1,
               title: "01. Transformer Foundations",
+              question: "How does a Transformer represent tokens as continuous coordinates?",
               icon: <Atom className="w-5 h-5 text-indigo-400" />,
               desc: "Deconstruct text into Token IDs, embeddings X ∈ ℝ⁴, positional vectors P, and combined H₀ = X + P. Understand V vs. d."
             },
             {
               id: 2,
               title: "02. Attention Laboratory",
+              question: "How does one token use information from other tokens?",
               icon: <Layers className="w-5 h-5 text-emerald-400" />,
               desc: "Trace Query (Q) against Keys (K), scaled dot-products QKᵀ/√dₖ, softmax normalization, and Value (V) aggregation."
             },
             {
               id: 3,
               title: "03. Explicit vs. Latent",
+              question: "What happens when reasoning itself requires multiple computational steps?",
               icon: <Split className="w-5 h-5 text-amber-400" />,
               desc: "Direct side-by-side execution on deterministic modular arithmetic. Compare emitted tokens against internal state updates."
             },
             {
               id: 4,
               title: "04. Latent Reasoning Lab",
+              question: "Can computation happen inside a hidden state without emitting text?",
               icon: <Cpu className="w-5 h-5 text-teal-400" />,
               desc: "Manipulate reasoning rounds R ∈ [1, 10]. Watch live state heatmaps, delta norms, 2D PCA trajectories, and failure cases."
             },
             {
               id: 5,
               title: "05. BDH & BDH-CQ Research",
+              question: "What happens when memory operates via dynamic synaptic plasticity?",
               icon: <Network className="w-5 h-5 text-purple-400" />,
               desc: "Pathway research frontier: simulate 4×4 Hebbian synaptic memory updates (S_t = λS_{t-1} + K_tᵀV_t) and review BDH-CQ papers."
             },
             {
               id: 6,
               title: "06. Diagnostic Challenge",
+              question: "Can YOU now explain the entire architectural journey?",
               icon: <CheckCircle2 className="w-5 h-5 text-rose-400" />,
               desc: "Test your conceptual understanding across 8 diagnostic questions with immediate feedback and learning summaries."
             },
@@ -220,9 +294,14 @@ export const LandingPage: React.FC<Props> = ({ onStartLab }) => {
                 </div>
                 <ArrowRight className="w-4 h-4 text-slate-500 group-hover:text-indigo-400 group-hover:translate-x-1 transition-all" />
               </div>
-              <h3 className="font-bold text-slate-100 text-base group-hover:text-indigo-300 transition-colors">
-                {card.title}
-              </h3>
+              <div className="space-y-1">
+                <h3 className="font-bold text-slate-100 text-base group-hover:text-indigo-300 transition-colors">
+                  {card.title}
+                </h3>
+                <span className="text-[11px] font-mono text-indigo-300/90 block font-semibold leading-snug">
+                  ❓ {card.question}
+                </span>
+              </div>
               <p className="text-xs text-slate-400 leading-relaxed">
                 {card.desc}
               </p>

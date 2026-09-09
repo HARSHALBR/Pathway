@@ -71,7 +71,12 @@ export function App() {
         {currentChapter === 3 && <Chapter03ExplicitVsLatent onNextChapter={() => handleSelectChapter(4)} />}
         {currentChapter === 4 && <Chapter04LatentLab onNextChapter={() => handleSelectChapter(5)} />}
         {currentChapter === 5 && <Chapter05BDHCaseStudy onNextChapter={() => handleSelectChapter(6)} />}
-        {currentChapter === 6 && <Chapter06Challenge onRestartLab={() => handleSelectChapter(0)} />}
+        {currentChapter === 6 && (
+          <Chapter06Challenge
+            onRestartLab={() => handleSelectChapter(0)}
+            onNavigateToChapter={handleSelectChapter}
+          />
+        )}
       </main>
 
       {/* Laboratory Footer */}

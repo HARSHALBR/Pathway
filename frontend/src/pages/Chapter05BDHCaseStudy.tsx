@@ -49,20 +49,40 @@ export const Chapter05BDHCaseStudy: React.FC<Props> = ({ onNextChapter }) => {
         </p>
       </div>
 
-      {/* Scientific Disclaimer Card */}
-      <div className="lab-glass-card p-5 border-l-4 border-l-indigo-500 space-y-2">
-        <div className="flex items-center gap-2">
-          <ShieldCheck className="w-5 h-5 text-indigo-400" />
-          <h4 className="text-sm font-bold text-slate-100 uppercase tracking-wide">
-            Scientific Scope & Conceptual Framing
-          </h4>
+      {/* Prominent Scientific Demarcation Banner */}
+      <div className="p-5 rounded-2xl bg-gradient-to-r from-slate-950 via-purple-950/30 to-slate-950 border-2 border-purple-500/50 space-y-3 shadow-xl">
+        <div className="flex items-center justify-between border-b border-purple-900/40 pb-2.5">
+          <div className="flex items-center gap-2">
+            <ShieldCheck className="w-5 h-5 text-purple-400" />
+            <h4 className="text-sm font-bold text-white uppercase tracking-wider font-mono">
+              Scientific Demarcation & Honesty Notice
+            </h4>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <EvidenceBadge type="toy" />
+            <EvidenceBadge type="published" />
+          </div>
         </div>
-        <p className="text-xs text-slate-300 leading-relaxed">
-          The interactive simulator below is a <strong>conceptual / simplified Hebbian memory abstraction</strong>. 
-          It illustrates the principle of persistent working memory updated via outer-product fast weights. 
-          It is <strong>NOT an implementation of the complete BDH or BDH-CQ production architectures</strong>. 
-          Published benchmark results are strictly cited from primary papers and are not computed locally.
-        </p>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+          <div className="p-3.5 rounded-xl bg-purple-950/40 border border-purple-800/60 space-y-1">
+            <span className="font-bold text-purple-300 font-mono block text-xs uppercase flex items-center gap-1.5">
+              <span>🟢</span> WHAT YOU ARE SEEING:
+            </span>
+            <p className="text-slate-200 leading-relaxed">
+              A simplified, inspectable <strong>BDH-inspired educational abstraction</strong> (4×4 Hebbian fast-weight matrix) designed to make the mathematical mechanics of dynamic synaptic working memory transparent to learners.
+            </p>
+          </div>
+
+          <div className="p-3.5 rounded-xl bg-slate-950/70 border border-slate-800 space-y-1">
+            <span className="font-bold text-rose-300 font-mono block text-xs uppercase flex items-center gap-1.5">
+              <span>⚠️</span> WHAT YOU ARE NOT SEEING:
+            </span>
+            <p className="text-slate-300 leading-relaxed">
+              The <strong>official production implementation of BDH or BDH-CQ</strong>. This toy simulation does not duplicate the multi-layer neural continuous-time ODEs or Context-Query reasoning loops published in Pathway's literature.
+            </p>
+          </div>
+        </div>
       </div>
 
       {/* Interactive Hebbian Memory Simulator */}
@@ -122,13 +142,13 @@ export const Chapter05BDHCaseStudy: React.FC<Props> = ({ onNextChapter }) => {
         </div>
 
         {/* Retention Slider */}
-        <div className="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
+        <div className="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-3">
           <div className="flex justify-between items-baseline">
             <span className="text-xs font-mono text-purple-300 font-bold">
               Memory Retention Coefficient (λ = {decayLambda.toFixed(2)})
             </span>
             <span className="text-[11px] font-mono text-slate-400">
-              {decayLambda === 0 ? 'Rapid Forgetting (λ=0: previous state erased)' : decayLambda === 1 ? 'Infinite Retention (λ=1: exact accumulation)' : 'Exponential Decay'}
+              {decayLambda === 0 ? 'Rapid Forgetting (λ=0)' : decayLambda === 1 ? 'Infinite Retention (λ=1)' : 'Exponential Plastic Decay'}
             </span>
           </div>
           <input
@@ -141,9 +161,19 @@ export const Chapter05BDHCaseStudy: React.FC<Props> = ({ onNextChapter }) => {
             className="w-full h-2.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-purple-500"
           />
           <div className="flex justify-between text-[10px] font-mono text-slate-500">
-            <span>0.0 (Only new associations retained)</span>
-            <span>0.5 (Balanced plastic decay)</span>
-            <span>1.0 (Exact accumulation of all history)</span>
+            <span>λ = 0.0</span>
+            <span>λ = 0.5 (Balanced)</span>
+            <span>λ = 1.0 (Lossless)</span>
+          </div>
+
+          {/* Dynamic Explanation of λ */}
+          <div className="p-3 rounded-lg bg-purple-950/30 border border-purple-800/40 text-xs text-purple-200 leading-relaxed">
+            💡 <strong>Dynamic Causal Explanation:</strong>{' '}
+            {decayLambda === 0
+              ? 'Past memory contributes nothing to the new state (0 · S_{t-1}). The synaptic state is completely overwritten by the immediate incoming association K_t^T · V_t.'
+              : decayLambda === 1
+              ? 'Previous memory is fully retained in this simplified accumulator (1.0 · S_{t-1} + K_t^T · V_t). History accumulates indefinitely without decay.'
+              : `Previous memory is retained with reduced strength (scaled by λ = ${decayLambda.toFixed(2)}) while the new outer-product association K_t^T · V_t is added, mimicking biological synaptic plasticity.`}
           </div>
         </div>
 
@@ -398,16 +428,21 @@ export const Chapter05BDHCaseStudy: React.FC<Props> = ({ onNextChapter }) => {
         </div>
       </div>
 
-      {/* Transition to Next Chapter */}
-      <div className="flex justify-between items-center pt-6 border-t border-slate-800">
-        <div className="text-xs text-slate-400">
-          Next: Complete the 60-Second Diagnostic Challenge to test your understanding.
+      {/* Storytelling Transition to Next Chapter */}
+      <div className="p-5 rounded-2xl bg-gradient-to-r from-indigo-950/40 via-slate-900 to-indigo-950/40 border border-indigo-700/40 flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div className="space-y-1 text-center sm:text-left">
+          <span className="text-[10px] font-mono uppercase tracking-widest text-indigo-400 font-bold block">
+            THE INTELLECTUAL JOURNEY: CHAPTER 05 ➔ CHAPTER 06
+          </span>
+          <p className="text-xs sm:text-sm text-slate-200 font-medium">
+            Can YOU now explain it? Test your architectural intuition in the 60-Second Diagnostic Challenge.
+          </p>
         </div>
         <button
           onClick={onNextChapter}
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs tracking-wider uppercase transition-all shadow-md shadow-indigo-600/30 cursor-pointer"
+          className="shrink-0 inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs tracking-wider uppercase transition-all shadow-lg shadow-indigo-600/30 cursor-pointer"
         >
-          <span>Continue to Chapter 06: Challenge</span>
+          <span>Continue → Diagnostic Challenge</span>
           <ArrowRight className="w-4 h-4" />
         </button>
       </div>

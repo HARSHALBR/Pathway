@@ -116,6 +116,21 @@ export const Chapter04LatentLab: React.FC<Props> = ({ onNextChapter }) => {
           </div>
         </div>
 
+        {/* Dynamic Causal Explanation of R */}
+        <div className="p-3.5 rounded-xl bg-indigo-950/40 border border-indigo-500/40 text-xs text-slate-200 leading-relaxed space-y-1">
+          <div className="flex items-center gap-2 text-indigo-300 font-bold font-mono">
+            <span>R = {R} Recurrent Computation Rounds Active</span>
+          </div>
+          <p>
+            💡 <strong>Pedagogical Insight:</strong> R controls how many internal recurrent computation rounds occur before the final readout. Increasing R gives the model additional opportunities to transform its internal state (<code className="text-indigo-300 font-mono">S_t ∈ ℝ⁴⁸</code>) without emitting another reasoning token.
+            {R === 1
+              ? " At R = 1, only a single transition (S₀ ➔ S₁) occurs, providing minimal opportunity for non-linear state refinement."
+              : R <= 4
+              ? ` At R = ${R}, the state undergoes ${R} sequential non-linear matrix transformations before the readout classification head.`
+              : ` At R = ${R}, deep latent recurrence takes place. Notice that beyond a certain depth, state adjustments diminish or saturate; increasing R does not automatically guarantee higher accuracy.`}
+          </p>
+        </div>
+
         {/* Task Parameter Subcontrols */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-slate-800 text-xs">
           <div>
@@ -251,22 +266,27 @@ export const Chapter04LatentLab: React.FC<Props> = ({ onNextChapter }) => {
               L2 Norm of State Change per Round: <code className="text-emerald-300 font-mono">||S_{`{t+1}`} - S_t||₂</code>
             </div>
 
-            <div className="space-y-2.5 pt-2">
+            <div className="space-y-3 pt-2">
               {deltas.map((norm, idx) => {
                 const maxNorm = Math.max(...deltas, 1.0);
                 const pct = Math.round((norm / maxNorm) * 100);
+                const isLarge = norm > 0.5;
                 return (
-                  <div key={idx} className="space-y-1">
+                  <div key={idx} className="p-3 rounded-lg bg-slate-900/60 border border-slate-800 space-y-1.5">
                     <div className="flex justify-between text-xs font-mono text-slate-300">
-                      <span>Round S_{idx} → S_{idx + 1}</span>
-                      <span className="text-emerald-400 font-bold">{norm.toFixed(4)}</span>
+                      <span className="font-bold text-indigo-300">Recurrent Step S_{idx} ➔ S_{idx + 1}</span>
+                      <span className="text-emerald-400 font-bold">||ΔS||₂ = {norm.toFixed(4)}</span>
                     </div>
-                    <div className="w-full bg-slate-900 rounded-full h-3 overflow-hidden border border-slate-800">
+                    <div className="w-full bg-slate-950 rounded-full h-2.5 overflow-hidden border border-slate-800">
                       <div
                         className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 rounded-full transition-all duration-300"
                         style={{ width: `${pct}%` }}
                       />
                     </div>
+                    <p className="text-[11px] text-slate-400 leading-snug">
+                      💡 <strong>Pedagogical Meaning:</strong> Round {idx + 1} {isLarge ? 'substantially reshaped' : 'moderately fine-tuned'} the continuous internal representation (magnitude {norm.toFixed(3)}). 
+                      The model executed another round of non-linear matrix computation (<code className="text-indigo-300 font-mono">W₂ tanh(W₁ s + b₁)</code>) <strong>without adding a single token to the context window</strong>.
+                    </p>
                   </div>
                 );
               })}
@@ -387,37 +407,71 @@ export const Chapter04LatentLab: React.FC<Props> = ({ onNextChapter }) => {
       </div>
 
       {/* Failure Mode Section: WHERE DOES THIS BREAK? */}
-      <div className="lab-glass-card p-5 border-l-4 border-l-rose-500 space-y-3">
-        <div className="flex items-center gap-2">
-          <AlertOctagon className="w-5 h-5 text-rose-400" />
-          <h3 className="text-base font-bold text-white">Where Does This Break? (Empirical Failure Boundary)</h3>
+      <div className="lab-glass-card p-5 border-l-4 border-l-rose-500 space-y-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <AlertOctagon className="w-5 h-5 text-rose-400" />
+            <h3 className="text-base font-bold text-white">Where Does This Break? (Empirical Failure Boundary)</h3>
+          </div>
           <EvidenceBadge type="limitation" />
         </div>
 
         <p className="text-xs md:text-sm text-slate-300 leading-relaxed">
           Scientific honesty requires demonstrating where toy systems fail. 
-          Our educational model was trained on prime moduli 7 and 11 at arithmetic Levels 1–2. 
-          When evaluated on <strong>out-of-distribution moduli (13, 17, 19, 23)</strong> or <strong>high compositional depth (Level 3 & 4)</strong>, 
-          accuracy drops significantly regardless of how large R is set:
+          An educational toy model is useful because we can inspect not only where it works, but also where it fails:
         </p>
+
+        {/* Failure Parameters Inspection Table */}
+        <div className="grid grid-cols-2 sm:grid-cols-6 gap-2 text-center text-xs font-mono">
+          <div className="p-2 rounded-lg bg-slate-950/80 border border-slate-800">
+            <span className="text-[10px] text-slate-400 block font-sans">Ground Truth</span>
+            <span className="text-sm font-bold text-emerald-400">{latentData?.ground_truth}</span>
+          </div>
+          <div className="p-2 rounded-lg bg-slate-950/80 border border-slate-800">
+            <span className="text-[10px] text-slate-400 block font-sans">Prediction</span>
+            <span className={`text-sm font-bold ${latentData?.correct ? 'text-emerald-400' : 'text-rose-400'}`}>
+              {latentData?.prediction} {latentData?.correct ? '✓' : '✗'}
+            </span>
+          </div>
+          <div className="p-2 rounded-lg bg-slate-950/80 border border-slate-800">
+            <span className="text-[10px] text-slate-400 block font-sans">Confidence</span>
+            <span className="text-sm font-bold text-indigo-300">{((latentData?.confidence || 0) * 100).toFixed(1)}%</span>
+          </div>
+          <div className="p-2 rounded-lg bg-slate-950/80 border border-slate-800">
+            <span className="text-[10px] text-slate-400 block font-sans">Difficulty</span>
+            <span className="text-sm font-bold text-amber-300">Level {level}</span>
+          </div>
+          <div className="p-2 rounded-lg bg-slate-950/80 border border-slate-800">
+            <span className="text-[10px] text-slate-400 block font-sans">Modulus (n)</span>
+            <span className="text-sm font-bold text-purple-300">Mod {modulus}</span>
+          </div>
+          <div className="p-2 rounded-lg bg-slate-950/80 border border-slate-800">
+            <span className="text-[10px] text-slate-400 block font-sans">Recurrence R</span>
+            <span className="text-sm font-bold text-teal-300">R = {R}</span>
+          </div>
+        </div>
 
         <div className="p-3.5 rounded-lg bg-rose-950/20 border border-rose-900/50 space-y-1.5 text-xs text-rose-200">
           <div>• <strong>Current Task:</strong> <code className="font-mono text-white">{latentData?.expression}</code></div>
-          <div>• <strong>Model Prediction:</strong> <span className="font-bold">{latentData?.prediction}</span> | <strong>Ground Truth:</strong> <span className="font-bold">{latentData?.ground_truth}</span></div>
           <div>• <strong>Key Takeaway:</strong> A toy recurrent MLP cannot magically solve arbitrary compositional arithmetic simply by increasing latent iterations without structured working memory (e.g. BDH-style synaptic plasticity).</div>
         </div>
       </div>
 
-      {/* Transition to Next Chapter */}
-      <div className="flex justify-between items-center pt-6 border-t border-slate-800">
-        <div className="text-xs text-slate-400">
-          Next: Bridge from toy recurrence to Pathway's published research on BDH and dynamic synaptic memory.
+      {/* Storytelling Transition to Next Chapter */}
+      <div className="p-5 rounded-2xl bg-gradient-to-r from-indigo-950/40 via-slate-900 to-indigo-950/40 border border-indigo-700/40 flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div className="space-y-1 text-center sm:text-left">
+          <span className="text-[10px] font-mono uppercase tracking-widest text-indigo-400 font-bold block">
+            THE INTELLECTUAL JOURNEY: CHAPTER 04 ➔ CHAPTER 05
+          </span>
+          <p className="text-xs sm:text-sm text-slate-200 font-medium">
+            What happens when the architecture itself gives memory a different mechanism — replacing the growing KV-cache with dynamic synaptic plasticity?
+          </p>
         </div>
         <button
           onClick={onNextChapter}
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs tracking-wider uppercase transition-all shadow-md shadow-indigo-600/30 cursor-pointer"
+          className="shrink-0 inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs tracking-wider uppercase transition-all shadow-lg shadow-indigo-600/30 cursor-pointer"
         >
-          <span>Continue to Chapter 05: BDH Research</span>
+          <span>Continue → BDH Research Frontier</span>
           <ArrowRight className="w-4 h-4" />
         </button>
       </div>

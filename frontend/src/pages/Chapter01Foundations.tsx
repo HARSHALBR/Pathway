@@ -189,6 +189,55 @@ export const Chapter01Foundations: React.FC<Props> = ({ onNextChapter }) => {
         </div>
       </div>
 
+      {/* Required Micro-Experiment: Dimension-by-Dimension Arithmetic Breakdown */}
+      <div className="lab-glass-card p-5 border-l-4 border-l-amber-500 space-y-4">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <span className="text-xs font-mono font-bold text-amber-400 uppercase tracking-wider block">
+              Interactive Vector Arithmetic Micro-Experiment
+            </span>
+            <h3 className="text-sm md:text-base font-bold text-white">
+              Deconstructing Addition: <code className="text-amber-300 font-mono">X_{`{${selectedTokenIdx}}`} + P_{`{${selectedTokenIdx}}`} = H_{`0,${selectedTokenIdx}}`}</code> for "{tokens[selectedTokenIdx]}"
+            </h3>
+          </div>
+          <span className="text-[11px] font-mono text-slate-400">Embedding Dimension d = 4</span>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
+          {[0, 1, 2, 3].map((dim) => {
+            const xVal = currentX[dim] ?? 0;
+            const pVal = currentP[dim] ?? 0;
+            const hVal = currentH0[dim] ?? 0;
+            return (
+              <div key={dim} className="p-3 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2 font-mono text-xs">
+                <div className="flex justify-between items-center border-b border-slate-900 pb-1">
+                  <span className="font-bold text-slate-300">Coordinate {dim + 1}</span>
+                  <span className="text-[10px] text-slate-500">dim={dim}</span>
+                </div>
+                <div className="space-y-1 text-slate-300">
+                  <div className="flex justify-between text-indigo-300">
+                    <span>X[{dim}]</span>
+                    <span>{xVal.toFixed(3)}</span>
+                  </div>
+                  <div className="flex justify-between text-emerald-300">
+                    <span>+ P[{dim}]</span>
+                    <span>{pVal.toFixed(3)}</span>
+                  </div>
+                  <div className="pt-1 border-t border-slate-800 flex justify-between font-bold text-amber-300">
+                    <span>= H₀[{dim}]</span>
+                    <span>{hVal.toFixed(3)}</span>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        <div className="p-3.5 rounded-lg bg-slate-950/70 border border-slate-800 text-xs text-slate-300 leading-relaxed">
+          💡 <strong>Pedagogical Explanation:</strong> The token embedding <span className="text-indigo-300 font-mono">X</span> provides the token's learned representation. Positional information <span className="text-emerald-300 font-mono">P</span> is then added so the representation also contains information about where the token occurs in the sequence.
+        </div>
+      </div>
+
       {/* Critical Conceptual Distinction: V vs d */}
       <div className="lab-glass-card p-5 border-l-4 border-l-purple-500 space-y-3">
         <h3 className="text-base font-bold text-slate-100 flex items-center gap-2">
@@ -508,16 +557,21 @@ export const Chapter01Foundations: React.FC<Props> = ({ onNextChapter }) => {
         numericExample={`H₀[${selectedTokenIdx}] = [${currentX.map(v => v.toFixed(2)).join(', ')}] + [${currentP.map(v => v.toFixed(2)).join(', ')}] = [${currentH0.map(v => v.toFixed(2)).join(', ')}]`}
       />
 
-      {/* Transition to Next Chapter */}
-      <div className="flex justify-between items-center pt-6 border-t border-slate-800">
-        <div className="text-xs text-slate-400">
-          Next: Discover how <span className="text-indigo-300 font-mono">H₀</span> projects into Queries, Keys, and Values to calculate self-attention.
+      {/* Storytelling Transition to Next Chapter */}
+      <div className="p-5 rounded-2xl bg-gradient-to-r from-indigo-950/40 via-slate-900 to-indigo-950/40 border border-indigo-700/40 flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div className="space-y-1 text-center sm:text-left">
+          <span className="text-[10px] font-mono uppercase tracking-widest text-indigo-400 font-bold block">
+            THE INTELLECTUAL JOURNEY: CHAPTER 01 ➔ CHAPTER 02
+          </span>
+          <p className="text-xs sm:text-sm text-slate-200 font-medium">
+            Every token now has a position-aware vector. But how do tokens communicate with one another?
+          </p>
         </div>
         <button
           onClick={onNextChapter}
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs tracking-wider uppercase transition-all shadow-md shadow-indigo-600/30 cursor-pointer"
+          className="shrink-0 inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs tracking-wider uppercase transition-all shadow-lg shadow-indigo-600/30 cursor-pointer"
         >
-          <span>Continue to Chapter 02: Attention Lab</span>
+          <span>Continue → Attention Laboratory</span>
           <ArrowRight className="w-4 h-4" />
         </button>
       </div>

@@ -102,9 +102,10 @@ const QUESTIONS: Question[] = [
 
 interface Props {
   onRestartLab: () => void;
+  onNavigateToChapter?: (chapterId: number) => void;
 }
 
-export const Chapter06Challenge: React.FC<Props> = ({ onRestartLab }) => {
+export const Chapter06Challenge: React.FC<Props> = ({ onRestartLab, onNavigateToChapter }) => {
   const [selectedAnswers, setSelectedAnswers] = useState<Record<number, string>>({});
   const [revealedQuestions, setRevealedQuestions] = useState<Record<number, boolean>>({});
 
@@ -262,6 +263,39 @@ export const Chapter06Challenge: React.FC<Props> = ({ onRestartLab }) => {
               ? " Great work! You have a solid grasp of explicit vs. latent computation trade-offs."
               : " Good effort! We recommend reviewing Chapters 02, 04, and 05 to revisit attention mechanics and latent recurrence."}
           </p>
+
+          {/* YOUR PATHWAY Checklist */}
+          <div className="max-w-md mx-auto p-4 rounded-xl bg-slate-950/80 border border-slate-800 text-left font-mono text-xs space-y-2">
+            <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block border-b border-slate-900 pb-1.5">
+              YOUR PATHWAY MASTERY SUMMARY
+            </span>
+            <div className="space-y-2 pt-1">
+              {[
+                { name: '1. Transformer Foundations', ch: 1, correct: selectedAnswers[1] === 'A' },
+                { name: '2. Attention Mechanics', ch: 2, correct: selectedAnswers[2] === 'B' && selectedAnswers[5] === 'A' },
+                { name: '3. Explicit vs Latent Reasoning', ch: 3, correct: selectedAnswers[3] === 'B' },
+                { name: '4. Recurrent Latent Reasoning', ch: 4, correct: selectedAnswers[4] === 'C' },
+                { name: '5. BDH Synaptic Memory', ch: 5, correct: selectedAnswers[6] === 'A' && selectedAnswers[7] === 'A' && selectedAnswers[8] === 'B' },
+              ].map((item, idx) => (
+                <div key={idx} className="flex items-center justify-between py-1 border-b border-slate-900/60 last:border-0">
+                  <span className="text-slate-300">{item.name}</span>
+                  <div className="flex items-center gap-2">
+                    <span className={item.correct ? 'text-emerald-400 font-bold' : 'text-rose-400 font-bold'}>
+                      {item.correct ? '✓ Mastered' : '✗ Review'}
+                    </span>
+                    {!item.correct && onNavigateToChapter && (
+                      <button
+                        onClick={() => onNavigateToChapter(item.ch)}
+                        className="text-[10px] px-2 py-0.5 rounded bg-indigo-950 text-indigo-300 border border-indigo-700/50 hover:bg-indigo-900 cursor-pointer"
+                      >
+                        Review Ch 0{item.ch}
+                      </button>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
 
           <div className="flex justify-center gap-3 pt-2">
             <button

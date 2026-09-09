@@ -237,13 +237,24 @@ export const Chapter03ExplicitVsLatent: React.FC<Props> = ({ onNextChapter }) =>
               <span className="text-indigo-300">Encoded Float Vector x ∈ ℝ⁶</span>
             </div>
 
-            <div className="p-2.5 rounded-lg bg-indigo-950/50 border border-indigo-800/50 text-indigo-200">
-              <span className="text-indigo-400 font-bold">Initial State S₀: </span>
-              <span>ReLU(W_enc · x + b_enc) ∈ ℝ⁴⁸</span>
+            <div className="p-2.5 rounded-lg bg-indigo-950/50 border border-indigo-800/50 text-indigo-200 space-y-1">
+              <div className="flex justify-between items-center">
+                <span className="text-indigo-400 font-bold">Initial State S₀:</span>
+                <span className="text-[10px] text-slate-400">S₀ ∈ ℝ⁴⁸</span>
+              </div>
+              <div className="text-[11px] text-slate-300 font-mono">
+                ReLU(W_enc · x + b_enc)
+              </div>
+              {latentResult?.states[0] && (
+                <div className="text-[10px] font-mono text-indigo-300/80 bg-slate-950/60 p-1 rounded">
+                  [{latentResult.states[0].slice(0, 5).map((v) => v.toFixed(2)).join(', ')}, ... +43 coords]
+                </div>
+              )}
             </div>
 
             {latentResult?.state_deltas.map((delta, idx) => {
               const visible = revealedStep >= idx + 1;
+              const nextState = latentResult?.states[idx + 1];
               return (
                 <div
                   key={idx}
@@ -252,9 +263,19 @@ export const Chapter03ExplicitVsLatent: React.FC<Props> = ({ onNextChapter }) =>
                   <div className="flex justify-center text-indigo-400 text-[10px] my-1">
                     ↓ recurrent update R={idx + 1} (||ΔS||₂ = {delta.toFixed(3)})
                   </div>
-                  <div className="p-2.5 rounded-lg bg-indigo-950/50 border border-indigo-700/50 text-indigo-200">
-                    <span className="text-indigo-400 font-bold">State S_{idx + 1}: </span>
-                    <span>S_{idx} + α W₂ tanh(W₁ S_{idx})</span>
+                  <div className="p-2.5 rounded-lg bg-indigo-950/50 border border-indigo-700/50 text-indigo-200 space-y-1">
+                    <div className="flex justify-between items-center">
+                      <span className="text-indigo-400 font-bold">State S_{idx + 1}:</span>
+                      <span className="text-[10px] text-slate-400">S_{idx + 1} ∈ ℝ⁴⁸</span>
+                    </div>
+                    <div className="text-[11px] text-slate-300 font-mono">
+                      S_{idx} + α W₂ tanh(W₁ S_{idx} + b₁)
+                    </div>
+                    {nextState && (
+                      <div className="text-[10px] font-mono text-indigo-300/80 bg-slate-950/60 p-1 rounded">
+                        [{nextState.slice(0, 5).map((v) => v.toFixed(2)).join(', ')}, ... +43 coords]
+                      </div>
+                    )}
                   </div>
                 </div>
               );
@@ -285,6 +306,32 @@ export const Chapter03ExplicitVsLatent: React.FC<Props> = ({ onNextChapter }) =>
             <div>• Emitted Tokens: <strong>0</strong></div>
             <div>• Internal State Updates: <strong>{latentResult?.R}</strong></div>
             <div>• Memory Footprint: Fixed-size vector (<code className="text-indigo-300">d = 48</code> coordinates).</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Central Conceptual Principle: Where is Computation Represented? */}
+      <div className="lab-glass-card p-5 border-l-4 border-l-indigo-500 space-y-3">
+        <h3 className="text-base font-bold text-white">
+          The Central Question: Where is Intermediate Computation Represented?
+        </h3>
+        <p className="text-xs text-slate-300 leading-relaxed">
+          The distinction between Chain-of-Thought (Mode A) and Latent Reasoning (Mode B) is not merely cosmetic. It defines the substrate of machine thought:
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+          <div className="p-3.5 rounded-xl bg-amber-950/30 border border-amber-800/50 space-y-1.5">
+            <span className="font-bold text-amber-300 block font-mono text-xs uppercase">Mode A: Serialized Tokens</span>
+            <p className="text-slate-300 leading-relaxed">
+              Intermediate computation is converted into human language text and appended to the context window. 
+              Memory scales linearly <code className="text-amber-300 font-mono">O(L)</code> and future all-pairs attention computation grows quadratically <code className="text-amber-300 font-mono">O(L²)</code>.
+            </p>
+          </div>
+          <div className="p-3.5 rounded-xl bg-indigo-950/30 border border-indigo-800/50 space-y-1.5">
+            <span className="font-bold text-indigo-300 block font-mono text-xs uppercase">Mode B: Continuous Hidden State</span>
+            <p className="text-slate-300 leading-relaxed">
+              Intermediate computation is executed inside a fixed-size state vector <code className="text-indigo-300 font-mono">S_t ∈ ℝ⁴⁸</code>. 
+              Zero reasoning tokens are emitted into the context sequence; working memory footprint remains fixed <code className="text-indigo-300 font-mono">O(1)</code>.
+            </p>
           </div>
         </div>
       </div>
@@ -349,16 +396,21 @@ export const Chapter03ExplicitVsLatent: React.FC<Props> = ({ onNextChapter }) =>
         numericExample={`For R=3 updates, state changes by L2 norm deltas: [${latentResult?.state_deltas.map(d => d.toFixed(2)).join(', ')}]`}
       />
 
-      {/* Transition to Next Chapter */}
-      <div className="flex justify-between items-center pt-6 border-t border-slate-800">
-        <div className="text-xs text-slate-400">
-          Next: Take direct interactive control of recurrence depth <span className="text-indigo-300 font-mono">R</span> in the laboratory.
+      {/* Storytelling Transition to Next Chapter */}
+      <div className="p-5 rounded-2xl bg-gradient-to-r from-indigo-950/40 via-slate-900 to-indigo-950/40 border border-indigo-700/40 flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div className="space-y-1 text-center sm:text-left">
+          <span className="text-[10px] font-mono uppercase tracking-widest text-indigo-400 font-bold block">
+            THE INTELLECTUAL JOURNEY: CHAPTER 03 ➔ CHAPTER 04
+          </span>
+          <p className="text-xs sm:text-sm text-slate-200 font-medium">
+            Instead of writing every intermediate step as text, can we directly control the depth of computation happening inside this hidden state?
+          </p>
         </div>
         <button
           onClick={onNextChapter}
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs tracking-wider uppercase transition-all shadow-md shadow-indigo-600/30 cursor-pointer"
+          className="shrink-0 inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs tracking-wider uppercase transition-all shadow-lg shadow-indigo-600/30 cursor-pointer"
         >
-          <span>Continue to Chapter 04: Latent Lab</span>
+          <span>Continue → Latent Reasoning Lab</span>
           <ArrowRight className="w-4 h-4" />
         </button>
       </div>
