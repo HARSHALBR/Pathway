@@ -40,9 +40,20 @@ The laboratory follows a strict **DO → SEE → UNDERSTAND → EXPLAIN** pedago
 
 ```text
 IITKGP_V2/
-├── main.py                         # Application entry point & curriculum launcher
-├── requirements.txt                # Lightweight dependencies (streamlit, numpy, matplotlib, seaborn, scikit-learn, pytest)
-├── components/                     # Reusable UI & visualization components
+├── start.sh                        # Unified one-command laboratory launcher (FastAPI + React)
+├── SETUP.md                        # Setup, testing, and deployment instructions
+├── LICENSES.md                     # Source, weights, fonts, and citations license catalog
+├── api/                            # Computational FastAPI backend
+│   └── server.py                   # High-performance REST endpoints for all pure NumPy models
+├── frontend/                       # Interactive React + Vite + TypeScript scientific instrument
+│   ├── src/
+│   │   ├── pages/                  # Interactive chapters (01–06 + Landing)
+│   │   ├── components/             # KaTeX math formula cards, visualizers, Navbar
+│   │   └── types/                  # Strict TypeScript API schemas
+│   └── package.json
+├── main.py                         # Application entry point & fallback Streamlit launcher
+├── requirements.txt                # Python dependencies (fastapi, uvicorn, numpy, pytest, etc.)
+├── components/                     # Streamlit UI & visualization components
 │   ├── ui_theme.py                 # Academic CSS design system, equation cards, badges
 │   ├── attention_visualizer.py     # Attention heatmaps, token attention bars, matrix plots
 │   ├── state_visualizer.py         # State evolution heatmaps, delta bars, 2D PCA trajectories
@@ -53,7 +64,7 @@ IITKGP_V2/
 │   ├── transformer_demo.py         # Educational single-head, single-layer Transformer with LayerNorm
 │   ├── explicit_reasoning.py       # Mode A: Symbolic step-by-step solver emitting tokens
 │   └── latent_reasoning.py         # Mode B: Recurrent latent state model trained via pure NumPy BPTT
-├── pages/                          # Multi-page interactive Streamlit UI
+├── pages/                          # Multi-page interactive Streamlit UI (fallback)
 │   ├── 01_Transformer_Foundations.py
 │   ├── 02_Attention_Laboratory.py
 │   ├── 03_Explicit_vs_Latent.py
@@ -64,7 +75,8 @@ IITKGP_V2/
 │   └── pretrain.py                 # Pure NumPy BPTT training script
 ├── data/generated/
 │   └── pretrained_weights.npz      # Trained weights for latent model (state_dim=48, hidden_dim=96)
-├── tests/                          # 50 comprehensive unit tests (100% pass rate)
+├── tests/                          # 60 comprehensive unit tests (100% pass rate)
+│   ├── test_api_server.py
 │   ├── test_explicit_model.py
 │   ├── test_extended_capabilities.py
 │   ├── test_latent_model.py
@@ -170,4 +182,4 @@ AI coding assistants were used in the development of this project for implementa
 
 ## 📄 License
 
-MIT License. See [LICENSE](LICENSE).
+MIT License. See [LICENSES.md](LICENSES.md).
