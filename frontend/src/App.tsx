@@ -35,7 +35,7 @@ export function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col selection:bg-indigo-500/30 selection:text-indigo-200">
+    <div className="min-h-screen bg-[#05070A] text-slate-100 flex flex-col selection:bg-cyan-500/20 selection:text-cyan-100">
       {/* Top Navbar */}
       <Navbar
         currentChapter={currentChapter}
@@ -46,7 +46,7 @@ export function App() {
       {/* Offline Warning Banner */}
       {!backendOnline && (
         <div className="bg-rose-950/90 border-b border-rose-800/80 px-4 py-2.5 text-xs text-rose-200 flex items-center justify-between">
-          <div className="flex items-center gap-2 max-w-4xl mx-auto">
+          <div className="flex items-center gap-2 lab-container">
             <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
             <span>
               <strong>Python Computational Engine Offline:</strong> Make sure the FastAPI server is running on <code className="font-mono bg-rose-900/60 px-1 py-0.5 rounded">http://127.0.0.1:8000</code> (<code className="font-mono">python3 api/server.py</code>).
@@ -80,16 +80,16 @@ export function App() {
       </main>
 
       {/* Laboratory Footer */}
-      <footer className="border-t border-slate-900 bg-slate-950/80 py-8 text-center text-xs text-slate-400">
-        <div className="max-w-7xl mx-auto px-4 space-y-2">
+      <footer className="border-t border-white/[0.06] bg-[#070A0F] py-8 text-center text-xs text-slate-400">
+        <div className="lab-container space-y-2">
           <p className="font-medium text-slate-300">
             Pathway — Latent Reasoning Laboratory • Interactive Research & Teaching Lab
           </p>
           <p className="text-[11px] text-slate-400">
             Pure NumPy Engine • Zero Database • Zero GPU Black-Boxes • Grounded in Vaswani et al. (2017), Kosowski et al. (2025), and Engdahl et al. (2026).
           </p>
-          <p className="text-[10px] text-slate-400">
-            Reference / Fallback Interface: <code className="text-slate-400">streamlit run main.py</code>
+          <p className="text-[10px] text-slate-500">
+            Reference / Fallback Interface: <code className="text-slate-400 font-mono">streamlit run main.py</code>
           </p>
         </div>
       </footer>

@@ -50,11 +50,11 @@ export const Chapter03ExplicitVsLatent: React.FC<Props> = ({ onNextChapter }) =>
   }, [level, modulus, seed]);
 
   return (
-    <div className="w-[94%] max-w-[1560px] mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-10 space-y-10">
+    <div className="lab-container py-8 md:py-10 space-y-10">
       {/* Chapter Header */}
       <div className="space-y-3">
         <div className="flex flex-wrap items-center gap-2">
-          <span className="text-xs font-mono px-2.5 py-1 rounded bg-cyan-950/80 text-cyan-300 border border-cyan-500/40 font-semibold shadow-[0_0_12px_rgba(6,182,212,0.15)]">
+          <span className="text-xs font-mono px-2.5 py-1 rounded bg-cyan-950/80 text-cyan-300 border border-cyan-500/40 font-semibold">
             CHAPTER 03 // DUAL PIPELINES
           </span>
           <EvidenceBadge type="live" />
@@ -91,9 +91,9 @@ export const Chapter03ExplicitVsLatent: React.FC<Props> = ({ onNextChapter }) =>
           <button
             onClick={executePipelines}
             disabled={isRunning}
-            className="group relative inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-indigo-600 text-white font-semibold text-xs tracking-normal transition-all shadow-[0_0_20px_rgba(6,182,212,0.35)] hover:shadow-[0_0_25px_rgba(6,182,212,0.55)] cursor-pointer disabled:opacity-50 border border-cyan-300/30"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-semibold text-xs transition-colors cursor-pointer disabled:opacity-50"
           >
-            <Play className={`w-3.5 h-3.5 fill-white ${isRunning ? 'animate-spin' : ''}`} />
+            <Play className={`w-3.5 h-3.5 fill-current ${isRunning ? 'animate-spin' : ''}`} />
             <span>{isRunning ? 'Executing Pipelines...' : 'Run Both Pathways'}</span>
           </button>
         </div>
@@ -408,7 +408,7 @@ export const Chapter03ExplicitVsLatent: React.FC<Props> = ({ onNextChapter }) =>
       />
 
       {/* Storytelling Transition to Next Chapter */}
-      <div className="p-6 rounded-2xl instrument-panel border border-cyan-500/25 flex flex-col sm:flex-row justify-between items-center gap-4 shadow-xl">
+      <div className="p-6 rounded-xl instrument-panel flex flex-col sm:flex-row justify-between items-center gap-4">
         <div className="space-y-1 text-center sm:text-left">
           <span className="text-[10px] font-mono uppercase tracking-widest text-cyan-400 font-bold block">
             PEDAGOGICAL PROGRESSION: CHAPTER 03 ➔ CHAPTER 04
@@ -419,7 +419,7 @@ export const Chapter03ExplicitVsLatent: React.FC<Props> = ({ onNextChapter }) =>
         </div>
         <button
           onClick={onNextChapter}
-          className="shrink-0 inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold text-xs tracking-wider uppercase transition-all shadow-[0_0_20px_rgba(6,182,212,0.3)] hover:shadow-[0_0_25px_rgba(6,182,212,0.5)] cursor-pointer border border-cyan-300/30"
+          className="shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-semibold text-xs transition-colors cursor-pointer"
         >
           <span>Continue → Latent Reasoning Lab</span>
           <ArrowRight className="w-4 h-4" />

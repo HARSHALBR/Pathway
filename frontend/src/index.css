@@ -3,11 +3,10 @@
 @layer base {
   body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    @apply bg-[#030712] text-slate-100 antialiased min-h-screen selection:bg-cyan-500/25 selection:text-cyan-100;
+    @apply bg-[#05070A] text-slate-100 antialiased min-h-screen selection:bg-cyan-500/20 selection:text-cyan-200;
+    background-color: #05070A;
     background-image: 
-      radial-gradient(circle at 50% 0%, rgba(14, 165, 233, 0.08) 0%, transparent 45%),
-      radial-gradient(circle at 90% 25%, rgba(99, 102, 241, 0.05) 0%, transparent 35%),
-      radial-gradient(circle at 10% 75%, rgba(16, 185, 129, 0.04) 0%, transparent 35%);
+      radial-gradient(ellipse 80% 50% at 50% -20%, rgba(6, 182, 212, 0.03), transparent 70%);
     background-attachment: fixed;
   }
 
@@ -18,150 +17,171 @@
 
 /* Responsive Scientific Workspace Container */
 .lab-container {
-  width: 94%;
-  max-width: 1560px;
+  width: min(100% - 48px, 1440px);
   margin-left: auto;
   margin-right: auto;
 }
 
-/* Scientific Instrument Surface Utilities */
+@media (max-width: 640px) {
+  .lab-container {
+    width: calc(100% - 32px);
+  }
+}
+
+/* ============================================================
+   THREE-TIER SCIENTIFIC SURFACES
+   ============================================================ */
+
+/* Level 1: Primary Instrument Panel (Dark Graphite Surface, Subtle Border, No Glow) */
 .instrument-panel {
-  background: linear-gradient(180deg, rgba(11, 18, 33, 0.8) 0%, rgba(6, 11, 22, 0.9) 100%);
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(56, 189, 248, 0.12);
-  border-radius: 1rem;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+  background-color: #0B0F14;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 20px -4px rgba(0, 0, 0, 0.5);
 }
 
 .instrument-panel-hover {
-  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.2s ease, box-shadow 0.2s ease;
+  transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .instrument-panel-hover:hover {
-  border-color: rgba(56, 189, 248, 0.3);
-  transform: translateY(-2px);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 16px 36px -10px rgba(2, 132, 199, 0.12);
+  border-color: rgba(6, 182, 212, 0.3);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.6);
 }
 
-/* Aliases for backwards compatibility */
+/* Level 2: Information Card (Slightly Lighter Surface, Thin Neutral Border) */
+.info-card {
+  background-color: #0E131A;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 0.5rem;
+}
+
+.info-card-hover {
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.info-card-hover:hover {
+  border-color: rgba(255, 255, 255, 0.12);
+  transform: translateY(-1px);
+}
+
+/* Level 3: Micro Control Surface */
+.micro-control {
+  background-color: #121820;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 0.375rem;
+}
+
+/* Backwards compatibility aliases */
 .lab-glass-card {
-  background: linear-gradient(180deg, rgba(11, 18, 33, 0.8) 0%, rgba(6, 11, 22, 0.9) 100%);
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(56, 189, 248, 0.12);
-  border-radius: 1rem;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+  background-color: #0B0F14;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 20px -4px rgba(0, 0, 0, 0.5);
 }
 
 .lab-glass-card-hover {
-  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.2s ease, box-shadow 0.2s ease;
-}
-.lab-glass-card-hover:hover {
-  border-color: rgba(56, 189, 248, 0.3);
-  transform: translateY(-2px);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 16px 36px -10px rgba(2, 132, 199, 0.12);
+  transition: border-color 0.2s ease, transform 0.2s ease;
 }
 
-/* 5-Stage Scientific Hierarchy Containers - Clean, Readable Surfaces */
+.lab-glass-card-hover:hover {
+  border-color: rgba(6, 182, 212, 0.3);
+  transform: translateY(-1px);
+}
+
+/* ============================================================
+   5-STAGE PEDAGOGICAL HIERARCHY CONTAINERS
+   Restrained color semantics:
+   - Control = Cyan Accent Border
+   - Computed = Neutral + Subtle Cyan
+   - Observed / Changed = Subtle Violet Accent
+   - Why = Neutral Explanatory Panel
+   - Meaning = Strong Typography
+   ============================================================ */
 .hierarchy-control {
-  background: linear-gradient(180deg, rgba(8, 17, 30, 0.8) 0%, rgba(5, 11, 20, 0.9) 100%);
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(6, 182, 212, 0.22);
-  border-radius: 1rem;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 8px 24px -6px rgba(0, 0, 0, 0.5);
+  background-color: #0B0F14;
+  border: 1px solid rgba(6, 182, 212, 0.25);
+  border-radius: 0.75rem;
 }
 
 .hierarchy-computed {
-  background: linear-gradient(180deg, rgba(11, 15, 34, 0.8) 0%, rgba(7, 9, 22, 0.9) 100%);
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(99, 102, 241, 0.22);
-  border-radius: 1rem;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 8px 24px -6px rgba(0, 0, 0, 0.5);
+  background-color: #0B0F14;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0.75rem;
 }
 
 .hierarchy-observed {
-  background: linear-gradient(180deg, rgba(6, 20, 18, 0.8) 0%, rgba(4, 13, 12, 0.9) 100%);
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(16, 185, 129, 0.22);
-  border-radius: 1rem;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 8px 24px -6px rgba(0, 0, 0, 0.5);
+  background-color: #0B0F14;
+  border: 1px solid rgba(139, 92, 246, 0.25);
+  border-radius: 0.75rem;
 }
 
 .hierarchy-why {
-  background: linear-gradient(180deg, rgba(24, 12, 34, 0.75) 0%, rgba(15, 8, 22, 0.85) 100%);
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(168, 85, 247, 0.24);
-  border-radius: 0.875rem;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 6px 20px -6px rgba(0, 0, 0, 0.4);
+  background-color: #0D1219;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 0.5rem;
 }
 
 .hierarchy-meaning {
-  background: linear-gradient(180deg, rgba(26, 18, 10, 0.75) 0%, rgba(16, 11, 6, 0.85) 100%);
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(245, 158, 11, 0.22);
-  border-radius: 1rem;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 8px 24px -6px rgba(0, 0, 0, 0.5);
+  background-color: #0B0F14;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0.75rem;
 }
 
-/* 5-Stage Hierarchy Badges */
+/* 5-Stage Hierarchy Badges - Clean & Restrained */
 .hierarchy-badge-control {
-  @apply inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-mono font-medium tracking-normal bg-cyan-500/10 text-cyan-300 border border-cyan-500/30;
+  @apply inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded text-xs font-mono font-medium tracking-normal bg-cyan-950/60 text-cyan-300 border border-cyan-500/30;
 }
 
 .hierarchy-badge-computed {
-  @apply inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-mono font-medium tracking-normal bg-indigo-500/10 text-indigo-300 border border-indigo-500/30;
+  @apply inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded text-xs font-mono font-medium tracking-normal bg-slate-900 text-slate-300 border border-slate-700/60;
 }
 
 .hierarchy-badge-observed {
-  @apply inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-mono font-medium tracking-normal bg-emerald-500/10 text-emerald-300 border border-emerald-500/30;
+  @apply inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded text-xs font-mono font-medium tracking-normal bg-violet-950/50 text-violet-300 border border-violet-500/30;
 }
 
 .hierarchy-badge-why {
-  @apply inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-mono font-medium tracking-normal bg-purple-500/10 text-purple-300 border border-purple-500/30;
+  @apply inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded text-xs font-mono font-medium tracking-normal bg-slate-900 text-slate-300 border border-slate-700/50;
 }
 
 .hierarchy-badge-meaning {
-  @apply inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-mono font-medium tracking-normal bg-amber-500/10 text-amber-300 border border-amber-500/30;
+  @apply inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded text-xs font-mono font-medium tracking-normal bg-slate-900 text-slate-200 border border-slate-700/60;
 }
 
-/* Subtle Illumination Accents */
+/* Subtle Illumination Accents - Minimal & Non-Distracting */
 .lab-glow-indigo {
-  box-shadow: 0 0 24px -6px rgba(99, 102, 241, 0.25);
+  box-shadow: 0 0 16px -4px rgba(99, 102, 241, 0.15);
 }
 
 .lab-glow-cyan {
-  box-shadow: 0 0 24px -6px rgba(6, 182, 212, 0.25);
+  box-shadow: 0 0 16px -4px rgba(6, 182, 212, 0.15);
 }
 
-.lab-glow-emerald {
-  box-shadow: 0 0 24px -6px rgba(16, 185, 129, 0.25);
-}
-
-.lab-glow-amber {
-  box-shadow: 0 0 24px -6px rgba(245, 158, 11, 0.25);
-}
-
-/* High-Contrast Interactive Matrix Cells */
+/* Interactive Matrix Reticle Cells */
 .matrix-cell {
-  transition: all 0.15s ease-out;
+  transition: transform 0.15s ease, outline-color 0.15s ease;
 }
 .matrix-cell:hover {
-  transform: scale(1.06);
+  transform: scale(1.05);
   z-index: 10;
-  box-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
+  outline: 1.5px solid rgba(6, 182, 212, 0.6);
+  outline-offset: 1px;
 }
 
 /* Custom Scientific Instrument Scrollbars */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 ::-webkit-scrollbar-track {
-  background: rgba(4, 7, 18, 0.9);
+  background: #05070A;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(56, 189, 248, 0.2);
+  background: rgba(255, 255, 255, 0.12);
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(56, 189, 248, 0.4);
+  background: rgba(6, 182, 212, 0.35);
 }
