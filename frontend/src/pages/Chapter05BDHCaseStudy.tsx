@@ -26,12 +26,12 @@ export const Chapter05BDHCaseStudy: React.FC<Props> = ({ onNextChapter }) => {
   const Ot = simData?.O_t || [];
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8 space-y-10">
+    <div className="max-w-5xl mx-auto px-4 py-8 space-y-12">
       {/* Chapter Header */}
       <div className="space-y-3">
         <div className="flex flex-wrap items-center gap-2">
-          <span className="text-xs font-mono px-2.5 py-1 rounded bg-indigo-950 text-indigo-300 border border-indigo-700/50 font-semibold">
-            CHAPTER 05
+          <span className="text-xs font-mono px-2.5 py-1 rounded bg-purple-950/80 text-purple-300 border border-purple-500/40 font-semibold shadow-[0_0_12px_rgba(168,85,247,0.15)]">
+            CHAPTER 05 // BDH FRONTIER
           </span>
           <EvidenceBadge type="primary" />
           <EvidenceBadge type="published" />
@@ -50,12 +50,12 @@ export const Chapter05BDHCaseStudy: React.FC<Props> = ({ onNextChapter }) => {
       </div>
 
       {/* Prominent Scientific Demarcation Banner */}
-      <div className="p-5 rounded-2xl bg-gradient-to-r from-slate-950 via-purple-950/30 to-slate-950 border-2 border-purple-500/50 space-y-3 shadow-xl">
-        <div className="flex items-center justify-between border-b border-purple-900/40 pb-2.5">
+      <div className="p-6 rounded-2xl instrument-panel border-2 border-purple-500/50 space-y-4 shadow-2xl shadow-purple-950/30">
+        <div className="flex items-center justify-between border-b border-purple-500/20 pb-3">
           <div className="flex items-center gap-2">
             <ShieldCheck className="w-5 h-5 text-purple-400" />
             <h4 className="text-sm font-bold text-white uppercase tracking-wider font-mono">
-              Scientific Demarcation & Honesty Notice
+              Scientific Demarcation & Provenance Notice
             </h4>
           </div>
           <div className="flex items-center gap-1.5">
@@ -65,7 +65,7 @@ export const Chapter05BDHCaseStudy: React.FC<Props> = ({ onNextChapter }) => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-          <div className="p-3.5 rounded-xl bg-purple-950/40 border border-purple-800/60 space-y-1">
+          <div className="p-4 rounded-xl bg-purple-950/40 border border-purple-500/40 space-y-1.5">
             <span className="font-bold text-purple-300 font-mono block text-xs uppercase flex items-center gap-1.5">
               <span>🟢</span> WHAT YOU ARE SEEING:
             </span>
@@ -74,34 +74,34 @@ export const Chapter05BDHCaseStudy: React.FC<Props> = ({ onNextChapter }) => {
             </p>
           </div>
 
-          <div className="p-3.5 rounded-xl bg-slate-950/70 border border-slate-800 space-y-1">
+          <div className="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-1.5">
             <span className="font-bold text-rose-300 font-mono block text-xs uppercase flex items-center gap-1.5">
               <span>⚠️</span> WHAT YOU ARE NOT SEEING:
             </span>
             <p className="text-slate-300 leading-relaxed">
-              The <strong>official production implementation of BDH or BDH-CQ</strong>. This toy simulation does not duplicate the multi-layer neural continuous-time ODEs or Context-Query reasoning loops published in Pathway's literature.
+              The <strong>official production implementation of BDH or BDH-CQ</strong>. This toy simulation does not duplicate the multi-layer continuous-time neural ODEs or Context-Query reasoning loops published in Pathway's literature.
             </p>
           </div>
         </div>
       </div>
 
-      {/* Interactive Hebbian Memory Simulator */}
-      <div className="lab-glass-card p-6 border-slate-800 space-y-6">
-        <div className="flex flex-wrap items-center justify-between gap-4">
+      {/* 1. CONTROL SURFACE & HEBBIAN SIMULATOR */}
+      <div className="hierarchy-control p-6 space-y-6">
+        <div className="flex flex-wrap items-center justify-between gap-4 border-b border-cyan-500/20 pb-3">
           <div>
             <div className="flex items-center gap-2">
               <Sparkles className="w-4 h-4 text-purple-400" />
               <h3 className="text-base font-bold text-white">
-                Interactive 4×4 Hebbian Synaptic Simulator
+                [1. WHAT I CONTROL] Interactive 4×4 Hebbian Synaptic Simulator
               </h3>
             </div>
-            <p className="text-xs text-slate-400 mt-0.5">
-              Formula: <code className="text-purple-300 font-mono">S_t = λ · S_{`{t-1}`} + K_t^T · V_t, \quad O_t = Q_t · S_t</code>
+            <p className="text-xs text-slate-400 mt-0.5 font-mono">
+              Apparatus Formula: <code className="text-purple-300">S_t = λ · S_{`{t-1}`} + K_t^T · V_t, \quad O_t = Q_t · S_t</code>
             </p>
           </div>
 
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-mono text-slate-400">Incoming Pattern:</span>
+          <div className="flex flex-wrap items-center gap-1.5">
+            <span className="text-xs font-mono text-slate-400 mr-1">Pattern:</span>
             {[
               { id: 1, label: 'Semantic (cat ➔ pet)' },
               { id: 2, label: 'Action (chased ➔ mouse)' },
@@ -111,10 +111,10 @@ export const Chapter05BDHCaseStudy: React.FC<Props> = ({ onNextChapter }) => {
               <button
                 key={p.id}
                 onClick={() => setStep(p.id)}
-                className={`px-2.5 py-1 rounded text-xs font-mono transition-colors cursor-pointer ${
+                className={`px-3 py-1 rounded-lg text-xs font-mono transition-all cursor-pointer ${
                   step === p.id
-                    ? 'bg-purple-600 text-white font-bold'
-                    : 'bg-slate-900 text-slate-300 border border-slate-800 hover:border-purple-600/50'
+                    ? 'bg-purple-600 text-white font-bold border border-purple-400 shadow-[0_0_10px_rgba(168,85,247,0.3)]'
+                    : 'bg-slate-900/90 text-slate-300 border border-slate-800 hover:border-purple-600/50'
                 }`}
               >
                 {p.label}
@@ -124,25 +124,25 @@ export const Chapter05BDHCaseStudy: React.FC<Props> = ({ onNextChapter }) => {
         </div>
 
         {/* Incoming K and V Vectors Display */}
-        <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800 flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
+        <div className="p-4 rounded-xl bg-slate-950/90 border border-slate-800/90 flex flex-wrap items-center justify-between gap-3 text-xs font-mono shadow-inner">
           <div>
             <span className="text-emerald-400 block text-[10px] uppercase font-bold">Incoming Key Vector K_t ∈ ℝ⁴</span>
             <span className="text-emerald-200">[{simData?.K_t.map(v => v.toFixed(2)).join(', ')}]</span>
           </div>
-          <span className="text-slate-500 font-bold">⊗</span>
+          <span className="text-slate-500 font-bold text-sm">⊗</span>
           <div>
             <span className="text-purple-400 block text-[10px] uppercase font-bold">Incoming Value Vector V_t ∈ ℝ⁴</span>
             <span className="text-purple-200">[{simData?.V_t.map(v => v.toFixed(2)).join(', ')}]</span>
           </div>
-          <span className="text-slate-500 font-bold">=</span>
+          <span className="text-slate-500 font-bold text-sm">=</span>
           <div>
-            <span className="text-indigo-400 block text-[10px] uppercase font-bold">Outer-Product Association ΔS = K_t^T · V_t</span>
-            <span className="text-indigo-200">4×4 instantaneous fast-weight matrix</span>
+            <span className="text-cyan-400 block text-[10px] uppercase font-bold">Outer-Product Association ΔS = K_t^T · V_t</span>
+            <span className="text-cyan-200">4×4 instantaneous fast-weight matrix</span>
           </div>
         </div>
 
         {/* Retention Slider */}
-        <div className="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-3">
+        <div className="p-4 rounded-xl bg-slate-950/90 border border-slate-800 space-y-3">
           <div className="flex justify-between items-baseline">
             <span className="text-xs font-mono text-purple-300 font-bold">
               Memory Retention Coefficient (λ = {decayLambda.toFixed(2)})
@@ -158,7 +158,7 @@ export const Chapter05BDHCaseStudy: React.FC<Props> = ({ onNextChapter }) => {
             step={0.05}
             value={decayLambda}
             onChange={(e) => setDecayLambda(Number(e.target.value))}
-            className="w-full h-2.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-purple-500"
+            className="w-full h-2.5 bg-slate-900 rounded-lg appearance-none cursor-pointer accent-purple-400 border border-slate-800"
           />
           <div className="flex justify-between text-[10px] font-mono text-slate-500">
             <span>λ = 0.0</span>
@@ -167,8 +167,8 @@ export const Chapter05BDHCaseStudy: React.FC<Props> = ({ onNextChapter }) => {
           </div>
 
           {/* Dynamic Explanation of λ */}
-          <div className="p-3 rounded-lg bg-purple-950/30 border border-purple-800/40 text-xs text-purple-200 leading-relaxed">
-            💡 <strong>Dynamic Causal Explanation:</strong>{' '}
+          <div className="hierarchy-why p-3 rounded-lg text-xs text-purple-200 leading-relaxed">
+            💡 <strong>[4. WHY IT CHANGED] Causal Plasticity:</strong>{' '}
             {decayLambda === 0
               ? 'Past memory contributes nothing to the new state (0 · S_{t-1}). The synaptic state is completely overwritten by the immediate incoming association K_t^T · V_t.'
               : decayLambda === 1
@@ -179,10 +179,10 @@ export const Chapter05BDHCaseStudy: React.FC<Props> = ({ onNextChapter }) => {
 
         {/* 3 Matrix Panels: Decayed + Outer Product = S_new */}
         <div className="space-y-2">
-          <div className="flex justify-between items-center text-xs text-slate-400">
+          <div className="flex justify-between items-center text-xs text-slate-400 font-mono">
             <span>Hover matrix cells to view exact values</span>
             {hoveredMatrixCell && (
-              <span className="font-mono text-purple-300 bg-purple-950/60 px-2 py-0.5 rounded border border-purple-800">
+              <span className="font-mono text-purple-300 bg-purple-950/70 px-2.5 py-0.5 rounded border border-purple-500/40">
                 {hoveredMatrixCell.name}[{hoveredMatrixCell.r},{hoveredMatrixCell.c}] = {hoveredMatrixCell.val.toFixed(3)}
               </span>
             )}
@@ -190,18 +190,18 @@ export const Chapter05BDHCaseStudy: React.FC<Props> = ({ onNextChapter }) => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {/* Decayed Memory */}
-            <div className="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800 space-y-2">
-              <span className="text-xs font-mono font-bold text-blue-400 block text-center">
+            <div className="p-3.5 rounded-xl instrument-panel border border-cyan-500/30 space-y-2">
+              <span className="text-xs font-mono font-bold text-cyan-400 block text-center">
                 λ · S_{`{t-1}`} (Decayed Past Memory)
               </span>
-              <div className="grid grid-cols-4 gap-1 p-2 bg-slate-950 rounded border border-slate-800">
+              <div className="grid grid-cols-4 gap-1 p-2 bg-slate-950 rounded-lg border border-slate-800">
                 {decayedSPrev.map((row, r) =>
                   row.map((val, c) => (
                     <div
                       key={`dec-${r}-${c}`}
                       onMouseEnter={() => setHoveredMatrixCell({ name: 'λ·S_{t-1}', r, c, val })}
                       onMouseLeave={() => setHoveredMatrixCell(null)}
-                      className="p-1.5 rounded text-center font-mono text-[10px] bg-blue-950/40 text-blue-300 hover:bg-blue-600/40 cursor-pointer"
+                      className="p-1.5 rounded text-center font-mono text-[10px] bg-cyan-950/40 text-cyan-300 hover:bg-cyan-600/40 cursor-pointer transition-colors"
                     >
                       {val.toFixed(2)}
                     </div>
@@ -211,18 +211,18 @@ export const Chapter05BDHCaseStudy: React.FC<Props> = ({ onNextChapter }) => {
             </div>
 
             {/* New Association */}
-            <div className="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800 space-y-2">
+            <div className="p-3.5 rounded-xl instrument-panel border border-emerald-500/30 space-y-2">
               <span className="text-xs font-mono font-bold text-emerald-400 block text-center">
                 K_t^T · V_t (New Association)
               </span>
-              <div className="grid grid-cols-4 gap-1 p-2 bg-slate-950 rounded border border-slate-800">
+              <div className="grid grid-cols-4 gap-1 p-2 bg-slate-950 rounded-lg border border-slate-800">
                 {outerProd.map((row, r) =>
                   row.map((val, c) => (
                     <div
                       key={`out-${r}-${c}`}
                       onMouseEnter={() => setHoveredMatrixCell({ name: 'K_t^T·V_t', r, c, val })}
                       onMouseLeave={() => setHoveredMatrixCell(null)}
-                      className="p-1.5 rounded text-center font-mono text-[10px] bg-emerald-950/40 text-emerald-300 hover:bg-emerald-600/40 cursor-pointer"
+                      className="p-1.5 rounded text-center font-mono text-[10px] bg-emerald-950/40 text-emerald-300 hover:bg-emerald-600/40 cursor-pointer transition-colors"
                     >
                       {val.toFixed(2)}
                     </div>
@@ -232,18 +232,18 @@ export const Chapter05BDHCaseStudy: React.FC<Props> = ({ onNextChapter }) => {
             </div>
 
             {/* Updated Synaptic State */}
-            <div className="p-3.5 rounded-xl bg-slate-900/80 border border-purple-500/40 space-y-2">
+            <div className="p-3.5 rounded-xl instrument-panel border border-purple-500/40 space-y-2 shadow-lg shadow-purple-950/20">
               <span className="text-xs font-mono font-bold text-purple-300 block text-center">
                 S_t (Updated Synaptic State)
               </span>
-              <div className="grid grid-cols-4 gap-1 p-2 bg-slate-950 rounded border border-purple-900/50">
+              <div className="grid grid-cols-4 gap-1 p-2 bg-slate-950 rounded-lg border border-purple-900/50">
                 {SNew.map((row, r) =>
                   row.map((val, c) => (
                     <div
                       key={`snew-${r}-${c}`}
                       onMouseEnter={() => setHoveredMatrixCell({ name: 'S_t', r, c, val })}
                       onMouseLeave={() => setHoveredMatrixCell(null)}
-                      className="p-1.5 rounded text-center font-mono text-[10px] bg-purple-950/60 text-purple-200 hover:bg-purple-600/40 cursor-pointer font-bold"
+                      className="p-1.5 rounded text-center font-mono text-[10px] bg-purple-950/60 text-purple-200 hover:bg-purple-600/40 cursor-pointer font-bold transition-colors"
                     >
                       {val.toFixed(2)}
                     </div>
@@ -255,7 +255,7 @@ export const Chapter05BDHCaseStudy: React.FC<Props> = ({ onNextChapter }) => {
         </div>
 
         {/* Readout Vector */}
-        <div className="p-3 rounded-lg bg-slate-950/90 border border-slate-800 flex items-center justify-between text-xs font-mono">
+        <div className="p-3.5 rounded-xl bg-slate-950/90 border border-slate-800 flex items-center justify-between text-xs font-mono shadow-inner">
           <span className="text-slate-400">Associative Readout: <code className="text-purple-300">O_t = Q_t · S_t ∈ ℝ⁴</code></span>
           <span className="text-purple-300 font-bold">
             [{Ot.map((v) => v.toFixed(3)).join(', ')}]
@@ -263,21 +263,21 @@ export const Chapter05BDHCaseStudy: React.FC<Props> = ({ onNextChapter }) => {
         </div>
       </div>
 
-      {/* Published Research Section */}
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
+      {/* 3. OBSERVED DYNAMICS: Published Literature & Benchmarks */}
+      <div className="hierarchy-observed p-6 space-y-5">
+        <div className="flex items-center justify-between border-b border-amber-500/20 pb-3">
           <h3 className="text-lg font-bold text-white flex items-center gap-2">
-            <BookOpen className="w-4 h-4 text-blue-400" />
-            <span>Published Literature: Pathway BDH & BDH-CQ Research</span>
+            <BookOpen className="w-4 h-4 text-cyan-400" />
+            <span>[3. WHAT CHANGED] Published Literature: Pathway BDH & BDH-CQ Research</span>
           </h3>
           <EvidenceBadge type="published" />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Paper 1: The Dragon Hatchling */}
-          <div className="p-5 rounded-xl bg-slate-900/80 border border-slate-800 space-y-3">
+          <div className="p-5 rounded-xl instrument-panel border border-cyan-500/30 space-y-3">
             <div className="flex justify-between items-start">
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-blue-950 text-blue-300 border border-blue-700/50">
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-700/50 font-bold">
                 PRIMARY PAPER
               </span>
               <span className="text-xs font-mono text-slate-400">arXiv:2509.26507</span>
@@ -285,19 +285,19 @@ export const Chapter05BDHCaseStudy: React.FC<Props> = ({ onNextChapter }) => {
             <h4 className="font-bold text-white text-sm">
               The Dragon Hatchling: The Missing Link between the Transformer and Models of the Brain
             </h4>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-slate-400 font-mono">
               Kosowski, Uznański, Chorowski, Stamirowska, Bartoszkiewicz (Pathway, Sept 2025)
             </p>
             <p className="text-xs text-slate-300 leading-relaxed">
               Replaces static token KV-caches with a fixed-size dynamic synaptic state matrix updated via continuous Hebbian plasticity: 
-              <code className="text-blue-300 block my-1 font-mono">dσ_ij / dt = η · Y_i · X_j - λ · σ_ij</code>
+              <code className="text-cyan-300 block my-1 font-mono">dσ_ij / dt = η · Y_i · X_j - λ · σ_ij</code>
             </p>
           </div>
 
           {/* Paper 2: BDH-CQ */}
-          <div className="p-5 rounded-xl bg-slate-900/80 border border-slate-800 space-y-3">
+          <div className="p-5 rounded-xl instrument-panel border border-purple-500/30 space-y-3">
             <div className="flex justify-between items-start">
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-blue-950 text-blue-300 border border-blue-700/50">
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-purple-950 text-purple-300 border border-purple-700/50 font-bold">
                 PRIMARY PAPER
               </span>
               <span className="text-xs font-mono text-slate-400">arXiv:2608.09888</span>
@@ -305,7 +305,7 @@ export const Chapter05BDHCaseStudy: React.FC<Props> = ({ onNextChapter }) => {
             <h4 className="font-bold text-white text-sm">
               BDH-CQ: In-Context Learning with Recurrent Latent Reasoning
             </h4>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-slate-400 font-mono">
               Engdahl, Kosowski, Chorowski (Pathway, Bielik AI, NYU, Aug 2026)
             </p>
             <p className="text-xs text-slate-300 leading-relaxed">
@@ -315,39 +315,41 @@ export const Chapter05BDHCaseStudy: React.FC<Props> = ({ onNextChapter }) => {
         </div>
 
         {/* Published Benchmark Card */}
-        <div className="p-5 rounded-xl bg-blue-950/20 border border-blue-500/40 space-y-3">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-mono font-bold text-blue-300">
-              Reported Benchmark Results for BDH-CQ (Engdahl et al., 2026)
+        <div className="p-5 rounded-xl bg-cyan-950/20 border border-cyan-500/40 space-y-3 shadow-lg shadow-cyan-950/20">
+          <div className="flex items-center justify-between border-b border-cyan-500/20 pb-2.5">
+            <span className="text-xs font-mono font-bold text-cyan-300">
+              Reported Benchmark Telemetry for BDH-CQ (Engdahl et al., 2026)
             </span>
-            <span className="text-[10px] font-mono text-slate-400">🔵 PUBLISHED RESULT</span>
+            <span className="text-[10px] font-mono text-cyan-300 bg-cyan-950/80 px-2 py-0.5 rounded border border-cyan-500/30">
+              PUBLISHED EVIDENCE
+            </span>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-center">
-            <div className="p-3 rounded-lg bg-slate-950/80 border border-slate-800">
+            <div className="p-3 rounded-xl bg-slate-950/90 border border-slate-800">
               <span className="text-xs text-slate-400 block font-mono">ARC-AGI-1 Benchmark</span>
-              <span className="text-xl font-bold text-blue-400 font-mono">29.5%</span>
-              <span className="text-[10px] text-slate-500 block">pass@2 accuracy</span>
+              <span className="text-xl font-bold text-cyan-400 font-mono">29.5%</span>
+              <span className="text-[10px] text-slate-500 block font-mono">pass@2 accuracy</span>
             </div>
-            <div className="p-3 rounded-lg bg-slate-950/80 border border-slate-800">
+            <div className="p-3 rounded-xl bg-slate-950/90 border border-slate-800">
               <span className="text-xs text-slate-400 block font-mono">Parameter Count</span>
               <span className="text-xl font-bold text-emerald-400 font-mono">150M</span>
-              <span className="text-[10px] text-slate-500 block">compact scale</span>
+              <span className="text-[10px] text-slate-500 block font-mono">compact scale</span>
             </div>
-            <div className="p-3 rounded-lg bg-slate-950/80 border border-slate-800">
+            <div className="p-3 rounded-xl bg-slate-950/90 border border-slate-800">
               <span className="text-xs text-slate-400 block font-mono">Inference Cost</span>
               <span className="text-xl font-bold text-amber-400 font-mono">$0.0007</span>
-              <span className="text-[10px] text-slate-500 block">per task evaluated</span>
+              <span className="text-[10px] text-slate-500 block font-mono">per task evaluated</span>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Crucial Demarcation: Toy vs Real BDH vs BDH-CQ */}
-      <div className="lab-glass-card p-6 border-slate-800 space-y-4">
+      {/* 5. WHAT THIS MEANS: Scientific Demarcation Matrix */}
+      <div className="hierarchy-meaning p-6 space-y-4">
         <h3 className="text-base font-bold text-white flex items-center gap-2">
-          <ShieldCheck className="w-5 h-5 text-indigo-400" />
-          <span>Scientific Demarcation: Our Toy Simulator vs. Real BDH vs. BDH-CQ</span>
+          <ShieldCheck className="w-5 h-5 text-purple-400" />
+          <span>[5. WHAT THIS MEANS] Scientific Demarcation: Toy Simulator vs. Real BDH vs. BDH-CQ</span>
         </h3>
         <p className="text-xs text-slate-300">
           To ensure strict scientific integrity, this table explicitly demarcates what is shared conceptually versus what is simplified:
@@ -355,9 +357,9 @@ export const Chapter05BDHCaseStudy: React.FC<Props> = ({ onNextChapter }) => {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
           {/* Column 1: Toy Model */}
-          <div className="p-4 rounded-xl bg-slate-900/90 border border-indigo-500/40 space-y-2">
-            <span className="text-xs font-mono font-bold text-indigo-400 uppercase block">1. Our Educational Simulator</span>
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-indigo-950 text-indigo-300 border border-indigo-800">
+          <div className="p-4 rounded-xl bg-slate-950/90 border border-cyan-500/40 space-y-2">
+            <span className="text-xs font-mono font-bold text-cyan-400 uppercase block">1. Our Educational Simulator</span>
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800">
               🟡 TOY ABSTRACTION
             </span>
             <ul className="text-slate-300 space-y-1.5 list-disc pl-4 pt-1">
@@ -368,7 +370,7 @@ export const Chapter05BDHCaseStudy: React.FC<Props> = ({ onNextChapter }) => {
           </div>
 
           {/* Column 2: Real BDH */}
-          <div className="p-4 rounded-xl bg-slate-900/90 border border-blue-500/40 space-y-2">
+          <div className="p-4 rounded-xl bg-slate-950/90 border border-blue-500/40 space-y-2">
             <span className="text-xs font-mono font-bold text-blue-400 uppercase block">2. Real BDH (Pathway 2025)</span>
             <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-blue-950 text-blue-300 border border-blue-800">
               ⚪ PRIMARY RESEARCH
@@ -381,7 +383,7 @@ export const Chapter05BDHCaseStudy: React.FC<Props> = ({ onNextChapter }) => {
           </div>
 
           {/* Column 3: BDH-CQ */}
-          <div className="p-4 rounded-xl bg-slate-900/90 border border-purple-500/40 space-y-2">
+          <div className="p-4 rounded-xl bg-slate-950/90 border border-purple-500/40 space-y-2">
             <span className="text-xs font-mono font-bold text-purple-400 uppercase block">3. BDH-CQ (Pathway 2026)</span>
             <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-purple-950 text-purple-300 border border-purple-800">
               🔵 PUBLISHED BENCHMARK
@@ -395,10 +397,10 @@ export const Chapter05BDHCaseStudy: React.FC<Props> = ({ onNextChapter }) => {
         </div>
       </div>
 
-      {/* Architectural Comparison Table */}
+      {/* Architectural Comparison Matrix */}
       <div className="space-y-4">
         <h3 className="text-lg font-bold text-white">Architectural Comparison Matrix</h3>
-        <div className="overflow-x-auto rounded-xl border border-slate-800 bg-slate-950/90">
+        <div className="overflow-x-auto rounded-xl border border-slate-800/90 bg-slate-950/90 shadow-2xl">
           <table className="w-full text-xs font-mono text-left border-collapse">
             <thead>
               <tr className="bg-slate-900/90 border-b border-slate-800 text-slate-300">
@@ -416,10 +418,10 @@ export const Chapter05BDHCaseStudy: React.FC<Props> = ({ onNextChapter }) => {
                 { dim: 'Interpretability', t: 'Human readable text', toy: 'Vector heatmaps & PCA', bdh: 'Associative memory projections' },
                 { dim: 'Scaling Bottleneck', t: 'Quadratic O(L²) attention', toy: 'MLP parameter capacity', bdh: 'Synaptic capacity limits' },
               ].map((row, i) => (
-                <tr key={i} className="border-b border-slate-900 hover:bg-slate-900/40 text-slate-300">
+                <tr key={i} className="border-b border-slate-900 hover:bg-slate-900/40 text-slate-300 transition-colors">
                   <td className="p-3 font-bold text-white">{row.dim}</td>
                   <td className="p-3 text-amber-300">{row.t}</td>
-                  <td className="p-3 text-indigo-300">{row.toy}</td>
+                  <td className="p-3 text-cyan-300">{row.toy}</td>
                   <td className="p-3 text-purple-300 font-bold">{row.bdh}</td>
                 </tr>
               ))}
@@ -429,10 +431,10 @@ export const Chapter05BDHCaseStudy: React.FC<Props> = ({ onNextChapter }) => {
       </div>
 
       {/* Storytelling Transition to Next Chapter */}
-      <div className="p-5 rounded-2xl bg-gradient-to-r from-indigo-950/40 via-slate-900 to-indigo-950/40 border border-indigo-700/40 flex flex-col sm:flex-row justify-between items-center gap-4">
+      <div className="p-6 rounded-2xl instrument-panel border border-cyan-500/25 flex flex-col sm:flex-row justify-between items-center gap-4 shadow-xl">
         <div className="space-y-1 text-center sm:text-left">
-          <span className="text-[10px] font-mono uppercase tracking-widest text-indigo-400 font-bold block">
-            THE INTELLECTUAL JOURNEY: CHAPTER 05 ➔ CHAPTER 06
+          <span className="text-[10px] font-mono uppercase tracking-widest text-cyan-400 font-bold block">
+            PEDAGOGICAL PROGRESSION: CHAPTER 05 ➔ CHAPTER 06
           </span>
           <p className="text-xs sm:text-sm text-slate-200 font-medium">
             Can YOU now explain it? Test your architectural intuition in the 60-Second Diagnostic Challenge.
@@ -440,7 +442,7 @@ export const Chapter05BDHCaseStudy: React.FC<Props> = ({ onNextChapter }) => {
         </div>
         <button
           onClick={onNextChapter}
-          className="shrink-0 inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs tracking-wider uppercase transition-all shadow-lg shadow-indigo-600/30 cursor-pointer"
+          className="shrink-0 inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold text-xs tracking-wider uppercase transition-all shadow-[0_0_20px_rgba(6,182,212,0.3)] hover:shadow-[0_0_25px_rgba(6,182,212,0.5)] cursor-pointer border border-cyan-300/30"
         >
           <span>Continue → Diagnostic Challenge</span>
           <ArrowRight className="w-4 h-4" />

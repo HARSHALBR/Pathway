@@ -125,12 +125,12 @@ export const Chapter06Challenge: React.FC<Props> = ({ onRestartLab, onNavigateTo
   const allComplete = totalAnswered === QUESTIONS.length;
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8 space-y-10">
+    <div className="max-w-4xl mx-auto px-4 py-8 space-y-12">
       {/* Chapter Header */}
       <div className="space-y-3">
         <div className="flex flex-wrap items-center gap-2">
-          <span className="text-xs font-mono px-2.5 py-1 rounded bg-indigo-950 text-indigo-300 border border-indigo-700/50 font-semibold">
-            CHAPTER 06
+          <span className="text-xs font-mono px-2.5 py-1 rounded bg-rose-950/80 text-rose-300 border border-rose-500/40 font-semibold shadow-[0_0_12px_rgba(244,63,94,0.15)]">
+            CHAPTER 06 // DIAGNOSTIC ASSESSMENT
           </span>
           <EvidenceBadge type="live" />
           <EvidenceBadge type="toy" />
@@ -147,15 +147,21 @@ export const Chapter06Challenge: React.FC<Props> = ({ onRestartLab, onNavigateTo
       </div>
 
       {/* Progress & Score Bar */}
-      <div className="lab-glass-card p-4 flex items-center justify-between">
+      <div className="instrument-panel p-4 flex flex-wrap items-center justify-between gap-3 shadow-lg">
         <div className="flex items-center gap-3">
-          <span className="text-xs font-mono text-slate-400">Progress:</span>
-          <span className="text-sm font-bold font-mono text-indigo-400">{totalAnswered} / {QUESTIONS.length} Answered</span>
+          <span className="text-xs font-mono text-slate-400 uppercase">Assessment Progress:</span>
+          <span className="text-sm font-bold font-mono text-cyan-300 bg-cyan-950/60 px-2.5 py-0.5 rounded border border-cyan-500/40">
+            {totalAnswered} / {QUESTIONS.length} Answered
+          </span>
         </div>
 
         <div className="flex items-center gap-3">
-          <span className="text-xs font-mono text-slate-400">Current Score:</span>
-          <span className={`text-base font-bold font-mono ${score >= 6 ? 'text-emerald-400' : 'text-amber-400'}`}>
+          <span className="text-xs font-mono text-slate-400 uppercase">Telemetry Score:</span>
+          <span className={`text-base font-bold font-mono px-3 py-0.5 rounded border ${
+            score >= 6
+              ? 'text-emerald-300 bg-emerald-950/70 border-emerald-500/50 shadow-[0_0_10px_rgba(16,185,129,0.2)]'
+              : 'text-amber-300 bg-amber-950/70 border-amber-500/50'
+          }`}>
             {score} / {QUESTIONS.length}
           </span>
         </div>
@@ -172,23 +178,27 @@ export const Chapter06Challenge: React.FC<Props> = ({ onRestartLab, onNavigateTo
           return (
             <div
               key={q.id}
-              className={`lab-glass-card p-5 space-y-4 border transition-all ${
+              className={`instrument-panel p-6 space-y-4 border transition-all shadow-xl ${
                 isAnswered
                   ? isCorrect
-                    ? 'border-emerald-500/50 bg-emerald-950/10'
-                    : 'border-rose-500/50 bg-rose-950/10'
-                  : 'border-slate-800'
+                    ? 'border-emerald-500/60 bg-emerald-950/10 shadow-[0_0_20px_rgba(16,185,129,0.15)]'
+                    : 'border-rose-500/60 bg-rose-950/10 shadow-[0_0_20px_rgba(244,63,94,0.15)]'
+                  : 'border-cyan-500/20'
               }`}
             >
-              <div className="flex items-start justify-between gap-3">
-                <span className="text-xs font-mono font-bold text-indigo-400 bg-indigo-950/60 px-2 py-0.5 rounded border border-indigo-800">
-                  Question {idx + 1} of {QUESTIONS.length}
+              <div className="flex items-start justify-between gap-3 border-b border-slate-800/80 pb-3">
+                <span className="text-xs font-mono font-bold text-cyan-300 bg-cyan-950/70 px-2.5 py-1 rounded border border-cyan-500/40">
+                  DIAGNOSTIC 0{idx + 1} / 0{QUESTIONS.length}
                 </span>
 
                 {isAnswered && (
-                  <span className={`flex items-center gap-1 text-xs font-bold font-mono ${isCorrect ? 'text-emerald-400' : 'text-rose-400'}`}>
-                    {isCorrect ? <CheckCircle2 className="w-4 h-4" /> : <XCircle className="w-4 h-4" />}
-                    <span>{isCorrect ? 'Correct' : 'Incorrect'}</span>
+                  <span className={`flex items-center gap-1.5 text-xs font-bold font-mono px-2.5 py-0.5 rounded border ${
+                    isCorrect
+                      ? 'text-emerald-300 bg-emerald-950/60 border-emerald-500/40'
+                      : 'text-rose-300 bg-rose-950/60 border-rose-500/40'
+                  }`}>
+                    {isCorrect ? <CheckCircle2 className="w-3.5 h-3.5" /> : <XCircle className="w-3.5 h-3.5" />}
+                    <span>{isCorrect ? 'VERIFIED ACCURATE' : 'MISPREDICTION'}</span>
                   </span>
                 )}
               </div>
@@ -201,13 +211,13 @@ export const Chapter06Challenge: React.FC<Props> = ({ onRestartLab, onNavigateTo
               <div className="space-y-2">
                 {q.options.map((opt) => {
                   const isSelected = chosenLabel === opt.label;
-                  let optStyle = 'bg-slate-900/90 border-slate-800 text-slate-300 hover:border-indigo-500/50';
+                  let optStyle = 'bg-slate-900/90 border-slate-800 text-slate-300 hover:border-cyan-500/50 hover:bg-slate-850';
 
                   if (isAnswered) {
                     if (opt.correct) {
-                      optStyle = 'bg-emerald-950/50 border-emerald-500 text-emerald-200 font-semibold';
+                      optStyle = 'bg-emerald-950/60 border-emerald-500 text-emerald-200 font-semibold shadow-[0_0_12px_rgba(16,185,129,0.2)]';
                     } else if (isSelected && !opt.correct) {
-                      optStyle = 'bg-rose-950/50 border-rose-500 text-rose-200';
+                      optStyle = 'bg-rose-950/60 border-rose-500 text-rose-200 shadow-[0_0_12px_rgba(244,63,94,0.2)]';
                     } else {
                       optStyle = 'bg-slate-950/40 border-slate-900 text-slate-500 opacity-60';
                     }
@@ -218,9 +228,9 @@ export const Chapter06Challenge: React.FC<Props> = ({ onRestartLab, onNavigateTo
                       key={opt.label}
                       disabled={isAnswered}
                       onClick={() => handleSelect(q.id, opt.label)}
-                      className={`w-full text-left p-3 rounded-xl border text-xs md:text-sm transition-all flex items-start gap-3 cursor-pointer disabled:cursor-default ${optStyle}`}
+                      className={`w-full text-left p-3.5 rounded-xl border text-xs md:text-sm transition-all flex items-start gap-3 cursor-pointer disabled:cursor-default ${optStyle}`}
                     >
-                      <span className="font-mono font-bold px-1.5 py-0.5 rounded bg-slate-950 border border-slate-800 text-xs">
+                      <span className="font-mono font-bold px-2 py-0.5 rounded bg-slate-950 border border-slate-800 text-xs text-cyan-300">
                         {opt.label}
                       </span>
                       <span className="flex-1 leading-relaxed">{opt.text}</span>
@@ -231,13 +241,13 @@ export const Chapter06Challenge: React.FC<Props> = ({ onRestartLab, onNavigateTo
 
               {/* Immediate Feedback Explanation */}
               {isAnswered && (
-                <div className={`p-3.5 rounded-lg border text-xs leading-relaxed ${
+                <div className={`p-4 rounded-xl border text-xs leading-relaxed ${
                   isCorrect
                     ? 'bg-emerald-950/40 border-emerald-800/60 text-emerald-200'
                     : 'bg-rose-950/40 border-rose-800/60 text-rose-200'
                 }`}>
                   <strong className="block mb-1 font-mono uppercase tracking-wider text-[10px]">
-                    {isCorrect ? '✓ Mathematical Explanation:' : `✗ Correct Answer: ${correctOption?.label}`}
+                    {isCorrect ? '✓ Verification Rationale:' : `✗ Canonical Answer: ${correctOption?.label}`}
                   </strong>
                   {q.explanation}
                 </div>
@@ -249,25 +259,27 @@ export const Chapter06Challenge: React.FC<Props> = ({ onRestartLab, onNavigateTo
 
       {/* Completion Card */}
       {allComplete && (
-        <div className="lab-glass-card p-6 border-2 border-indigo-500/60 text-center space-y-4">
-          <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-indigo-500 to-emerald-400 mx-auto flex items-center justify-center text-white shadow-lg shadow-indigo-500/30">
-            <Trophy className="w-6 h-6" />
+        <div className="instrument-panel p-8 border-2 border-cyan-500/60 text-center space-y-5 shadow-2xl shadow-cyan-950/40">
+          <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-cyan-500 via-blue-600 to-indigo-600 mx-auto flex items-center justify-center text-white shadow-[0_0_25px_rgba(6,182,212,0.4)] border border-cyan-300/40">
+            <Trophy className="w-7 h-7" />
           </div>
 
-          <h2 className="text-2xl font-bold text-white">Laboratory Diagnostic Complete!</h2>
-          <p className="text-sm text-slate-300 max-w-md mx-auto">
-            You scored <strong className="text-indigo-300 font-mono text-base">{score} / {QUESTIONS.length}</strong>. 
-            {score === 8
-              ? " Outstanding! You have demonstrated complete mastery across Transformer attention, explicit/latent reasoning, and BDH research concepts."
-              : score >= 6
-              ? " Great work! You have a solid grasp of explicit vs. latent computation trade-offs."
-              : " Good effort! We recommend reviewing Chapters 02, 04, and 05 to revisit attention mechanics and latent recurrence."}
-          </p>
+          <div className="space-y-1">
+            <h2 className="text-2xl sm:text-3xl font-bold text-white">Laboratory Diagnostic Complete!</h2>
+            <p className="text-sm text-slate-300 max-w-md mx-auto">
+              Diagnostic Telemetry Score: <strong className="text-cyan-300 font-mono text-base">{score} / {QUESTIONS.length}</strong>. 
+              {score === 8
+                ? " Outstanding! You have demonstrated complete conceptual mastery across Transformer attention, explicit/latent reasoning, and BDH research concepts."
+                : score >= 6
+                ? " Great work! You have a solid grasp of explicit vs. latent computation trade-offs."
+                : " Good effort! We recommend reviewing Modules 02, 04, and 05 to revisit attention mechanics and latent recurrence."}
+            </p>
+          </div>
 
           {/* YOUR PATHWAY Checklist */}
-          <div className="max-w-md mx-auto p-4 rounded-xl bg-slate-950/80 border border-slate-800 text-left font-mono text-xs space-y-2">
-            <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block border-b border-slate-900 pb-1.5">
-              YOUR PATHWAY MASTERY SUMMARY
+          <div className="max-w-md mx-auto p-4 rounded-xl bg-slate-950/90 border border-slate-800 text-left font-mono text-xs space-y-2.5 shadow-inner">
+            <span className="text-[10px] text-cyan-400 font-bold uppercase tracking-widest block border-b border-slate-900 pb-1.5">
+              CURRICULUM MASTERY MATRIX
             </span>
             <div className="space-y-2 pt-1">
               {[
@@ -286,7 +298,7 @@ export const Chapter06Challenge: React.FC<Props> = ({ onRestartLab, onNavigateTo
                     {!item.correct && onNavigateToChapter && (
                       <button
                         onClick={() => onNavigateToChapter(item.ch)}
-                        className="text-[10px] px-2 py-0.5 rounded bg-indigo-950 text-indigo-300 border border-indigo-700/50 hover:bg-indigo-900 cursor-pointer"
+                        className="text-[10px] px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-700/50 hover:bg-cyan-900 cursor-pointer"
                       >
                         Review Ch 0{item.ch}
                       </button>
@@ -303,7 +315,7 @@ export const Chapter06Challenge: React.FC<Props> = ({ onRestartLab, onNavigateTo
                 setSelectedAnswers({});
                 setRevealedQuestions({});
               }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-900 border border-slate-700 text-slate-300 hover:bg-slate-800 text-xs font-mono font-semibold"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-300 hover:bg-slate-850 text-xs font-mono font-semibold cursor-pointer transition-colors"
             >
               <RotateCcw className="w-3.5 h-3.5" />
               <span>Retake Quiz</span>
@@ -311,7 +323,7 @@ export const Chapter06Challenge: React.FC<Props> = ({ onRestartLab, onNavigateTo
 
             <button
               onClick={onRestartLab}
-              className="inline-flex items-center gap-2 px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-mono font-semibold shadow-md shadow-indigo-600/30"
+              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white text-xs font-mono font-bold tracking-wider uppercase shadow-[0_0_15px_rgba(6,182,212,0.3)] hover:shadow-[0_0_20px_rgba(6,182,212,0.5)] cursor-pointer transition-all border border-cyan-300/30"
             >
               <span>Back to Overview</span>
               <ArrowRight className="w-3.5 h-3.5" />
