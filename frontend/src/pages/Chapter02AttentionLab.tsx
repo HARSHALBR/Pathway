@@ -40,7 +40,7 @@ export const Chapter02AttentionLab: React.FC<Props> = ({ onNextChapter }) => {
   const comparisons = attentionData?.comparisons || [];
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8 space-y-12">
+    <div className="w-[94%] max-w-[1560px] mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-10 space-y-10">
       {/* Chapter Header */}
       <div className="space-y-3">
         <div className="flex flex-wrap items-center gap-2">
@@ -55,7 +55,7 @@ export const Chapter02AttentionLab: React.FC<Props> = ({ onNextChapter }) => {
           Attention Laboratory: Query-Key Matching & Value Aggregation
         </h1>
 
-        <p className="text-slate-300 text-sm md:text-base leading-relaxed max-w-3xl">
+        <p className="text-slate-300 text-sm md:text-base leading-relaxed max-w-4xl">
           Self-attention allows every token to dynamically look at every other token in the sequence. 
           Select any active token as a <strong className="text-cyan-400">Query (Q)</strong> and watch it compare against all <strong className="text-emerald-400">Keys (K)</strong> 
           via scaled dot-products to normalize into attention weights and aggregate <strong className="text-amber-400">Values (V)</strong>.
@@ -63,84 +63,86 @@ export const Chapter02AttentionLab: React.FC<Props> = ({ onNextChapter }) => {
       </div>
 
       {/* 1. CONTROL SURFACE: Interactive Query & Key Token Drivers */}
-      <div className="hierarchy-control p-6 space-y-5">
-        <div className="flex items-center justify-between border-b border-cyan-500/20 pb-2.5">
+      <div className="hierarchy-control p-6 space-y-6">
+        <div className="flex items-center justify-between border-b border-cyan-500/20 pb-3">
           <span className="text-xs font-mono font-bold text-cyan-300 uppercase tracking-wider flex items-center gap-2">
             <Sliders className="w-4 h-4 text-cyan-400" />
-            <span>[1. WHAT I CONTROL] Dual-Channel Attention Reticle Drivers</span>
+            <span>[1. What I Control] Dual-Channel Attention Reticle Drivers</span>
           </span>
-          <span className="text-[10px] font-mono text-slate-400">INSPECTION COORD</span>
+          <span className="text-[11px] font-mono text-slate-400">Interactive Coordinate Selection</span>
         </div>
 
-        {/* Driver 1: Query Token A */}
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-mono text-cyan-300 font-semibold flex items-center gap-1.5">
-              <Eye className="w-3.5 h-3.5 text-cyan-400" />
-              <span>Channel Q // Active Query Token (What is seeking context):</span>
-            </span>
-            <span className="text-xs font-mono text-cyan-300 bg-cyan-950/60 px-2 py-0.5 rounded border border-cyan-500/30">
-              Q: <strong>"{tokens[activeQueryIdx]}" (pos {activeQueryIdx})</strong>
-            </span>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Driver 1: Query Token A */}
+          <div className="space-y-3 p-4 rounded-xl bg-slate-950/60 border border-cyan-500/20">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-medium text-cyan-300 flex items-center gap-1.5">
+                <Eye className="w-3.5 h-3.5 text-cyan-400" />
+                <span>Channel Q // Active Query Token:</span>
+              </span>
+              <span className="text-xs font-mono text-cyan-300 bg-cyan-950/80 px-2 py-0.5 rounded border border-cyan-500/30">
+                Q: <strong>"{tokens[activeQueryIdx]}" (#{activeQueryIdx})</strong>
+              </span>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {tokens.map((tok, idx) => {
+                const isQuery = idx === activeQueryIdx;
+                return (
+                  <button
+                    key={`q-${idx}`}
+                    onClick={() => {
+                      setActiveQueryIdx(idx);
+                      setSelectedCell({ qIdx: idx, kIdx: activeKeyIdx });
+                    }}
+                    className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs transition-all cursor-pointer border ${
+                      isQuery
+                        ? 'bg-cyan-950/80 text-cyan-200 font-semibold border-cyan-400 shadow-[0_0_12px_rgba(6,182,212,0.3)] scale-105'
+                        : 'bg-slate-900/90 text-slate-300 border-slate-800 hover:border-slate-700'
+                    }`}
+                  >
+                    <span className="text-[10px] text-slate-400 font-mono">#{idx}</span>
+                    <span className="tracking-wide">"{tok}"</span>
+                    {isQuery && <span className="text-[9px] px-1 rounded bg-cyan-900/80 text-cyan-300 font-bold font-mono">Q</span>}
+                  </button>
+                );
+              })}
+            </div>
           </div>
-          <div className="flex flex-wrap gap-2">
-            {tokens.map((tok, idx) => {
-              const isQuery = idx === activeQueryIdx;
-              return (
-                <button
-                  key={`q-${idx}`}
-                  onClick={() => {
-                    setActiveQueryIdx(idx);
-                    setSelectedCell({ qIdx: idx, kIdx: activeKeyIdx });
-                  }}
-                  className={`flex items-center gap-2 px-3.5 py-2 rounded-xl font-mono text-xs transition-all cursor-pointer border ${
-                    isQuery
-                      ? 'bg-cyan-950/70 text-cyan-200 font-bold border-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.35)] scale-105'
-                      : 'bg-slate-900/90 text-slate-300 border-slate-800 hover:border-slate-700'
-                  }`}
-                >
-                  <span className="text-[10px] text-slate-400 font-normal">#{idx}</span>
-                  <span className="text-xs tracking-wide">"{tok}"</span>
-                  {isQuery && <span className="text-[9px] px-1.5 py-0.2 rounded bg-cyan-900/60 text-cyan-300 font-bold">Q</span>}
-                </button>
-              );
-            })}
-          </div>
-        </div>
 
-        {/* Driver 2: Key Token B */}
-        <div className="space-y-2 pt-3 border-t border-slate-800/80">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-mono text-emerald-400 font-semibold flex items-center gap-1.5">
-              <Layers className="w-3.5 h-3.5 text-emerald-400" />
-              <span>Channel K // Target Key Token (What is being evaluated):</span>
-            </span>
-            <span className="text-xs font-mono text-emerald-300 bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-500/30">
-              K: <strong>"{tokens[activeKeyIdx]}" (pos {activeKeyIdx})</strong>
-            </span>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            {tokens.map((tok, idx) => {
-              const isKey = idx === activeKeyIdx;
-              return (
-                <button
-                  key={`k-${idx}`}
-                  onClick={() => {
-                    setActiveKeyIdx(idx);
-                    setSelectedCell({ qIdx: activeQueryIdx, kIdx: idx });
-                  }}
-                  className={`flex items-center gap-2 px-3.5 py-2 rounded-xl font-mono text-xs transition-all cursor-pointer border ${
-                    isKey
-                      ? 'bg-emerald-950/70 text-emerald-200 font-bold border-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.35)] scale-105'
-                      : 'bg-slate-900/90 text-slate-300 border-slate-800 hover:border-slate-700'
-                  }`}
-                >
-                  <span className="text-[10px] text-slate-400 font-normal">#{idx}</span>
-                  <span className="text-xs tracking-wide">"{tok}"</span>
-                  {isKey && <span className="text-[9px] px-1.5 py-0.2 rounded bg-emerald-900/60 text-emerald-300 font-bold">K</span>}
-                </button>
-              );
-            })}
+          {/* Driver 2: Key Token B */}
+          <div className="space-y-3 p-4 rounded-xl bg-slate-950/60 border border-emerald-500/20">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-medium text-emerald-400 flex items-center gap-1.5">
+                <Layers className="w-3.5 h-3.5 text-emerald-400" />
+                <span>Channel K // Target Key Token:</span>
+              </span>
+              <span className="text-xs font-mono text-emerald-300 bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-500/30">
+                K: <strong>"{tokens[activeKeyIdx]}" (#{activeKeyIdx})</strong>
+              </span>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {tokens.map((tok, idx) => {
+                const isKey = idx === activeKeyIdx;
+                return (
+                  <button
+                    key={`k-${idx}`}
+                    onClick={() => {
+                      setActiveKeyIdx(idx);
+                      setSelectedCell({ qIdx: activeQueryIdx, kIdx: idx });
+                    }}
+                    className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs transition-all cursor-pointer border ${
+                      isKey
+                        ? 'bg-emerald-950/80 text-emerald-200 font-semibold border-emerald-400 shadow-[0_0_12px_rgba(16,185,129,0.3)] scale-105'
+                        : 'bg-slate-900/90 text-slate-300 border-slate-800 hover:border-slate-700'
+                    }`}
+                  >
+                    <span className="text-[10px] text-slate-400 font-mono">#{idx}</span>
+                    <span className="tracking-wide">"{tok}"</span>
+                    {isKey && <span className="text-[9px] px-1 rounded bg-emerald-900/80 text-emerald-300 font-bold font-mono">K</span>}
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </div>
       </div>

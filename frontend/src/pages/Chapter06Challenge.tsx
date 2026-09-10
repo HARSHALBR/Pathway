@@ -132,7 +132,7 @@ export const Chapter06Challenge: React.FC<Props> = ({ onRestartLab, onNavigateTo
   const allComplete = totalAnswered === QUESTIONS.length;
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8 space-y-12">
+    <div className="w-[94%] max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-10 space-y-10">
       {/* Chapter Header */}
       <div className="space-y-3">
         <div className="flex flex-wrap items-center gap-2">
@@ -147,17 +147,17 @@ export const Chapter06Challenge: React.FC<Props> = ({ onRestartLab, onNavigateTo
           Diagnostic Challenge: Conceptual Architecture Assessment
         </h1>
 
-        <p className="text-slate-300 text-sm md:text-base leading-relaxed">
+        <p className="text-slate-300 text-sm md:text-base leading-relaxed max-w-4xl">
           Verify your architectural comprehension across 8 diagnostic problems. 
           Every question evaluates conceptual and mathematical principles, providing immediate rationale on selection.
         </p>
       </div>
 
       {/* Progress & Score Bar */}
-      <div className="instrument-panel p-4 flex flex-wrap items-center justify-between gap-3 shadow-lg">
+      <div className="instrument-panel p-5 flex flex-wrap items-center justify-between gap-4 shadow-lg">
         <div className="flex items-center gap-3">
           <span className="text-xs font-mono text-slate-400 uppercase">Assessment Progress:</span>
-          <span className="text-sm font-bold font-mono text-cyan-300 bg-cyan-950/60 px-2.5 py-0.5 rounded border border-cyan-500/40">
+          <span className="text-sm font-bold font-mono text-cyan-300 bg-cyan-950/60 px-3 py-1 rounded-lg border border-cyan-500/40">
             {totalAnswered} / {QUESTIONS.length} Answered
           </span>
         </div>
@@ -284,9 +284,9 @@ export const Chapter06Challenge: React.FC<Props> = ({ onRestartLab, onNavigateTo
           </div>
 
           {/* Curriculum Mastery Matrix */}
-          <div className="max-w-md mx-auto p-4 rounded-xl bg-slate-950/90 border border-slate-800 text-left font-mono text-xs space-y-2.5 shadow-inner">
-            <span className="text-[10px] text-cyan-400 font-bold uppercase tracking-widest block border-b border-slate-900 pb-1.5">
-              CURRICULUM MASTERY MATRIX
+          <div className="max-w-xl mx-auto p-5 rounded-xl bg-slate-950/90 border border-slate-800 text-left font-mono text-xs space-y-3 shadow-inner">
+            <span className="text-[11px] text-cyan-400 font-bold uppercase tracking-wider block border-b border-slate-900 pb-2">
+              Curriculum Mastery Matrix
             </span>
             <div className="space-y-2 pt-1">
               {[
@@ -296,8 +296,8 @@ export const Chapter06Challenge: React.FC<Props> = ({ onRestartLab, onNavigateTo
                 { name: '4. Recurrent Latent Reasoning', ch: 4, correct: isQuestionCorrect(4) },
                 { name: '5. BDH Synaptic Memory', ch: 5, correct: isQuestionCorrect(6) && isQuestionCorrect(7) && isQuestionCorrect(8) },
               ].map((item, idx) => (
-                <div key={idx} className="flex items-center justify-between py-1 border-b border-slate-900/60 last:border-0">
-                  <span className="text-slate-300">{item.name}</span>
+                <div key={idx} className="flex items-center justify-between py-1.5 border-b border-slate-900/60 last:border-0">
+                  <span className="text-slate-300 font-sans text-xs">{item.name}</span>
                   <div className="flex items-center gap-2">
                     <span className={item.correct ? 'text-emerald-400 font-bold' : 'text-rose-400 font-bold'}>
                       {item.correct ? '✓ Mastered' : '✗ Review'}
@@ -305,7 +305,7 @@ export const Chapter06Challenge: React.FC<Props> = ({ onRestartLab, onNavigateTo
                     {!item.correct && onNavigateToChapter && (
                       <button
                         onClick={() => onNavigateToChapter(item.ch)}
-                        className="text-[10px] px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-700/50 hover:bg-cyan-900 cursor-pointer"
+                        className="text-[10px] px-2.5 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-700/50 hover:bg-cyan-900 cursor-pointer transition-colors"
                       >
                         Review Ch 0{item.ch}
                       </button>
@@ -316,13 +316,13 @@ export const Chapter06Challenge: React.FC<Props> = ({ onRestartLab, onNavigateTo
             </div>
           </div>
 
-          <div className="flex justify-center gap-3 pt-2">
+          <div className="flex justify-center gap-4 pt-2">
             <button
               onClick={() => {
                 setSelectedAnswers({});
                 setRevealedQuestions({});
               }}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-300 hover:bg-slate-850 text-xs font-mono font-semibold cursor-pointer transition-colors"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-300 hover:bg-slate-850 text-xs font-medium cursor-pointer transition-colors"
             >
               <RotateCcw className="w-3.5 h-3.5" />
               <span>Retake Quiz</span>
@@ -330,7 +330,7 @@ export const Chapter06Challenge: React.FC<Props> = ({ onRestartLab, onNavigateTo
 
             <button
               onClick={onRestartLab}
-              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white text-xs font-mono font-bold tracking-wider uppercase shadow-[0_0_15px_rgba(6,182,212,0.3)] hover:shadow-[0_0_20px_rgba(6,182,212,0.5)] cursor-pointer transition-all border border-cyan-300/30"
+              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white text-xs font-semibold tracking-normal shadow-[0_0_15px_rgba(6,182,212,0.3)] hover:shadow-[0_0_20px_rgba(6,182,212,0.5)] cursor-pointer transition-all border border-cyan-300/30"
             >
               <span>Back to Overview</span>
               <ArrowRight className="w-3.5 h-3.5" />

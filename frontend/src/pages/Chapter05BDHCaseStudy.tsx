@@ -26,7 +26,7 @@ export const Chapter05BDHCaseStudy: React.FC<Props> = ({ onNextChapter }) => {
   const Ot = simData?.O_t || [];
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8 space-y-12">
+    <div className="w-[94%] max-w-[1560px] mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-10 space-y-10">
       {/* Chapter Header */}
       <div className="space-y-3">
         <div className="flex flex-wrap items-center gap-2">
@@ -42,7 +42,7 @@ export const Chapter05BDHCaseStudy: React.FC<Props> = ({ onNextChapter }) => {
           BDH & BDH-CQ Research Frontier: Dynamic Synaptic Working Memory
         </h1>
 
-        <p className="text-slate-300 text-sm md:text-base leading-relaxed max-w-3xl">
+        <p className="text-slate-300 text-sm md:text-base leading-relaxed max-w-4xl">
           Bridging educational toy models to Pathway's published research on 
           <strong className="text-white"> Baby Dragon Hatchling (BDH)</strong> and <strong className="text-white">BDH-CQ</strong>. 
           Discover how fixed-size synaptic state matrices replace expanding KV-caches through brain-inspired Hebbian plasticity.
@@ -50,7 +50,7 @@ export const Chapter05BDHCaseStudy: React.FC<Props> = ({ onNextChapter }) => {
       </div>
 
       {/* Prominent Scientific Demarcation Banner */}
-      <div className="p-6 rounded-2xl instrument-panel border-2 border-purple-500/50 space-y-4 shadow-2xl shadow-purple-950/30">
+      <div className="p-6 md:p-8 rounded-2xl instrument-panel border border-purple-500/40 space-y-4 shadow-xl shadow-purple-950/20">
         <div className="flex items-center justify-between border-b border-purple-500/20 pb-3">
           <div className="flex items-center gap-2">
             <ShieldCheck className="w-5 h-5 text-purple-400" />
@@ -64,21 +64,21 @@ export const Chapter05BDHCaseStudy: React.FC<Props> = ({ onNextChapter }) => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-          <div className="p-4 rounded-xl bg-purple-950/40 border border-purple-500/40 space-y-1.5">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
+          <div className="p-5 rounded-xl bg-purple-950/30 border border-purple-500/30 space-y-2">
             <span className="font-bold text-purple-300 font-mono block text-xs uppercase flex items-center gap-1.5">
-              <span>🟢</span> WHAT YOU ARE SEEING:
+              <span>🟢</span> What you are seeing:
             </span>
-            <p className="text-slate-200 leading-relaxed">
+            <p className="text-slate-200 leading-relaxed text-sm">
               A simplified, inspectable <strong>BDH-inspired educational abstraction</strong> (4×4 Hebbian fast-weight matrix) designed to make the mathematical mechanics of dynamic synaptic working memory transparent to learners.
             </p>
           </div>
 
-          <div className="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-1.5">
+          <div className="p-5 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
             <span className="font-bold text-rose-300 font-mono block text-xs uppercase flex items-center gap-1.5">
-              <span>⚠️</span> WHAT YOU ARE NOT SEEING:
+              <span>⚠️</span> What you are not seeing:
             </span>
-            <p className="text-slate-300 leading-relaxed">
+            <p className="text-slate-300 leading-relaxed text-sm">
               The <strong>official production implementation of BDH or BDH-CQ</strong>. This toy simulation does not duplicate the multi-layer continuous-time neural ODEs or Context-Query reasoning loops published in Pathway's literature.
             </p>
           </div>
@@ -86,22 +86,22 @@ export const Chapter05BDHCaseStudy: React.FC<Props> = ({ onNextChapter }) => {
       </div>
 
       {/* 1. CONTROL SURFACE & HEBBIAN SIMULATOR */}
-      <div className="hierarchy-control p-6 space-y-6">
-        <div className="flex flex-wrap items-center justify-between gap-4 border-b border-cyan-500/20 pb-3">
+      <div className="hierarchy-control p-6 md:p-8 space-y-6">
+        <div className="flex flex-wrap items-center justify-between gap-4 border-b border-cyan-500/20 pb-4">
           <div>
             <div className="flex items-center gap-2">
               <Sparkles className="w-4 h-4 text-purple-400" />
-              <h3 className="text-base font-bold text-white">
-                [1. WHAT I CONTROL] Interactive 4×4 Hebbian Synaptic Simulator
+              <h3 className="text-base sm:text-lg font-bold text-white">
+                [1. What I Control] Interactive 4×4 Hebbian Synaptic Simulator
               </h3>
             </div>
-            <p className="text-xs text-slate-400 mt-0.5 font-mono">
+            <p className="text-xs text-slate-400 mt-1 font-mono">
               Apparatus Formula: <code className="text-purple-300">S_t = λ · S_{`{t-1}`} + K_t^T · V_t, \quad O_t = Q_t · S_t</code>
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-1.5">
-            <span className="text-xs font-mono text-slate-400 mr-1">Pattern:</span>
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-xs font-mono text-slate-400 mr-1">Preset Pattern:</span>
             {[
               { id: 1, label: 'Semantic (cat ➔ pet)' },
               { id: 2, label: 'Action (chased ➔ mouse)' },

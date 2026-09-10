@@ -50,7 +50,7 @@ export const Chapter03ExplicitVsLatent: React.FC<Props> = ({ onNextChapter }) =>
   }, [level, modulus, seed]);
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8 space-y-12">
+    <div className="w-[94%] max-w-[1560px] mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-10 space-y-10">
       {/* Chapter Header */}
       <div className="space-y-3">
         <div className="flex flex-wrap items-center gap-2">
@@ -65,9 +65,9 @@ export const Chapter03ExplicitVsLatent: React.FC<Props> = ({ onNextChapter }) =>
           Explicit vs. Latent Reasoning: Where Does Computation Happen?
         </h1>
 
-        <p className="text-slate-300 text-sm md:text-base leading-relaxed max-w-3xl">
+        <p className="text-slate-300 text-sm md:text-base leading-relaxed max-w-4xl">
           The essential architectural question between Chain-of-Thought reasoning and latent reasoning is 
-          <strong className="text-white"> WHERE the intermediate computation is represented</strong>: 
+          <strong className="text-white"> where intermediate computation is represented</strong>: 
           externalized as discrete language tokens in the sequence context, or internalized within continuous state vectors without emitting text.
         </p>
       </div>
@@ -78,7 +78,7 @@ export const Chapter03ExplicitVsLatent: React.FC<Props> = ({ onNextChapter }) =>
           <div>
             <span className="text-xs font-mono uppercase tracking-wider text-cyan-300 font-semibold flex items-center gap-2">
               <Sliders className="w-3.5 h-3.5 text-cyan-400" />
-              <span>[1. WHAT I CONTROL] Synthetic Modular Arithmetic Generator:</span>
+              <span>[1. What I Control] Synthetic Modular Arithmetic Generator:</span>
             </span>
             <div className="text-xl md:text-2xl font-mono font-bold text-white mt-1">
               {task?.expression || 'Loading...'}
@@ -91,10 +91,10 @@ export const Chapter03ExplicitVsLatent: React.FC<Props> = ({ onNextChapter }) =>
           <button
             onClick={executePipelines}
             disabled={isRunning}
-            className="group relative inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-indigo-600 text-white font-bold text-xs tracking-wider uppercase transition-all shadow-[0_0_20px_rgba(6,182,212,0.35)] hover:shadow-[0_0_25px_rgba(6,182,212,0.55)] cursor-pointer disabled:opacity-50 border border-cyan-300/30"
+            className="group relative inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-indigo-600 text-white font-semibold text-xs tracking-normal transition-all shadow-[0_0_20px_rgba(6,182,212,0.35)] hover:shadow-[0_0_25px_rgba(6,182,212,0.55)] cursor-pointer disabled:opacity-50 border border-cyan-300/30"
           >
             <Play className={`w-3.5 h-3.5 fill-white ${isRunning ? 'animate-spin' : ''}`} />
-            <span>{isRunning ? 'EXECUTING PIPELINES...' : 'RUN BOTH PATHWAYS'}</span>
+            <span>{isRunning ? 'Executing Pipelines...' : 'Run Both Pathways'}</span>
           </button>
         </div>
 

@@ -43,7 +43,7 @@ export const Chapter01Foundations: React.FC<Props> = ({ onNextChapter }) => {
   const currentH0 = H0[selectedTokenIdx] || [0, 0, 0, 0];
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8 space-y-12">
+    <div className="w-[94%] max-w-[1560px] mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-10 space-y-10">
       {/* Chapter Header */}
       <div className="space-y-3">
         <div className="flex flex-wrap items-center gap-2">
@@ -58,7 +58,7 @@ export const Chapter01Foundations: React.FC<Props> = ({ onNextChapter }) => {
           Transformer Foundations: Tokens, Embeddings & Positions
         </h1>
 
-        <p className="text-slate-300 text-sm md:text-base leading-relaxed max-w-3xl">
+        <p className="text-slate-300 text-sm md:text-base leading-relaxed max-w-4xl">
           Before attention can compare tokens, human language must be converted into continuous geometric coordinates. 
           Deconstruct how discrete words map into embedding vectors <span className="font-mono text-cyan-300">X</span>, 
           absorb positional coordinates <span className="font-mono text-emerald-300">P</span>, and form initial hidden representations <span className="font-mono text-amber-300">H₀ = X + P</span>.
@@ -66,13 +66,13 @@ export const Chapter01Foundations: React.FC<Props> = ({ onNextChapter }) => {
       </div>
 
       {/* 1. CONTROL SURFACE: Preset Sentence Selector */}
-      <div className="hierarchy-control p-5 space-y-3">
+      <div className="hierarchy-control p-6 space-y-4">
         <div className="flex items-center justify-between">
           <label className="text-xs font-mono uppercase tracking-wider text-cyan-300 font-semibold flex items-center gap-2">
             <Sliders className="w-3.5 h-3.5 text-cyan-400" />
-            <span>[1. WHAT I CONTROL] Sequence Input:</span>
+            <span>[1. What I Control] Sequence Input:</span>
           </label>
-          <span className="text-[10px] font-mono text-slate-400">SELECT DATA STREAM</span>
+          <span className="text-[11px] font-mono text-slate-400">Select Input Sentence</span>
         </div>
         <div className="flex flex-wrap gap-2">
           {[

@@ -41,7 +41,7 @@ export const Navbar: React.FC<Props> = ({ currentChapter, onSelectChapter, backe
 
   return (
     <header className="sticky top-0 z-40 bg-[#03060C]/90 backdrop-blur-xl border-b border-cyan-500/15 shadow-xl shadow-black/40">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="w-[94%] max-w-[1560px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo & Identity */}
           <div 
@@ -53,30 +53,30 @@ export const Navbar: React.FC<Props> = ({ currentChapter, onSelectChapter, backe
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="font-extrabold tracking-wider text-white text-base font-mono">PATHWAY</span>
-                <span className="text-[10px] font-mono uppercase px-1.5 py-0.2 rounded bg-cyan-950/80 text-cyan-300 border border-cyan-500/40 font-bold">
+                <span className="font-bold tracking-tight text-white text-base">PATHWAY</span>
+                <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-500/30 font-medium">
                   INSTRUMENT
                 </span>
               </div>
-              <p className="text-[10px] text-slate-400 font-mono tracking-tight">Latent Reasoning Laboratory</p>
+              <p className="text-[11px] text-slate-400 font-normal">Latent Reasoning Laboratory</p>
             </div>
           </div>
 
           {/* Center: Chapter Pipeline */}
-          <nav className="hidden lg:flex items-center gap-1 bg-[#090E1A]/90 p-1 rounded-xl border border-cyan-500/20 shadow-inner">
+          <nav className="hidden xl:flex items-center gap-1 bg-slate-950/70 p-1 rounded-xl border border-slate-800/80 shadow-inner">
             {CHAPTERS.map((ch) => {
               const active = ch.id === currentChapter;
               return (
                 <button
                   key={ch.id}
                   onClick={() => onSelectChapter(ch.id)}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-medium transition-all cursor-pointer ${
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-sans font-medium transition-all cursor-pointer ${
                     active
-                      ? 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-bold shadow-md shadow-cyan-500/30 border border-cyan-300/40'
-                      : 'text-slate-400 hover:text-cyan-200 hover:bg-slate-800/50'
+                      ? 'bg-cyan-500/15 text-cyan-200 font-semibold border border-cyan-400/40 shadow-sm'
+                      : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40 border border-transparent'
                   }`}
                 >
-                  <span className={active ? 'text-white' : 'text-slate-400'}>{ch.icon}</span>
+                  <span className={active ? 'text-cyan-300' : 'text-slate-500'}>{ch.icon}</span>
                   <span>{ch.shortTitle}</span>
                 </button>
               );
@@ -101,7 +101,7 @@ export const Navbar: React.FC<Props> = ({ currentChapter, onSelectChapter, backe
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
-              <span className="text-xs font-mono text-cyan-300 px-1 font-bold">
+              <span className="text-xs font-mono text-cyan-300 px-1.5 font-bold">
                 {currentChapter} / {CHAPTERS.length - 1}
               </span>
               <button
@@ -117,14 +117,14 @@ export const Navbar: React.FC<Props> = ({ currentChapter, onSelectChapter, backe
         </div>
 
         {/* Mobile Chapter Bar */}
-        <div className="lg:hidden flex items-center gap-1 overflow-x-auto py-2 border-t border-slate-800/80 scrollbar-none">
+        <div className="xl:hidden flex items-center gap-1 overflow-x-auto py-2 border-t border-slate-800/80 scrollbar-none">
           {CHAPTERS.map((ch) => (
             <button
               key={ch.id}
               onClick={() => onSelectChapter(ch.id)}
               className={`whitespace-nowrap px-2.5 py-1 rounded-md text-xs font-medium transition-colors ${
                 ch.id === currentChapter
-                  ? 'bg-indigo-600 text-white'
+                  ? 'bg-cyan-600/30 text-cyan-200 border border-cyan-500/40 font-semibold'
                   : 'text-slate-400 bg-slate-900/60'
               }`}
             >

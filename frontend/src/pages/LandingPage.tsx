@@ -10,20 +10,20 @@ export const LandingPage: React.FC<Props> = ({ onStartLab }) => {
   const [activePathway, setActivePathway] = useState<'both' | 'explicit' | 'latent'>('both');
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8 md:py-12 space-y-16 relative">
+    <div className="w-[94%] max-w-[1560px] mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 space-y-16 relative">
       {/* Background ambient lighting effects */}
-      <div className="absolute top-10 left-1/2 -translate-x-1/2 w-full max-w-4xl h-72 bg-gradient-to-b from-cyan-500/10 via-indigo-500/5 to-transparent blur-3xl pointer-events-none -z-10" />
+      <div className="absolute top-10 left-1/2 -translate-x-1/2 w-full max-w-5xl h-72 bg-gradient-to-b from-cyan-500/8 via-indigo-500/4 to-transparent blur-3xl pointer-events-none -z-10" />
 
       {/* Hero Section */}
       <div className="text-center space-y-6">
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-950/40 border border-cyan-500/30 text-cyan-300 text-xs font-mono font-medium shadow-[0_0_15px_rgba(6,182,212,0.15)]">
           <Activity className="w-3.5 h-3.5 text-cyan-400 animate-pulse" />
-          <span className="tracking-wide">NUMPY SCIENTIFIC INSTRUMENT // RUNTIME VERIFIED</span>
+          <span className="tracking-normal">NumPy Scientific Engine // Runtime Verified</span>
         </div>
 
         <div className="space-y-3">
-          <span className="block font-mono text-xs uppercase tracking-[0.25em] text-cyan-400 font-bold">
-            PATHWAY RESEARCH LABORATORY
+          <span className="block text-xs uppercase tracking-wider text-cyan-400 font-semibold font-mono">
+            Pathway Research Laboratory
           </span>
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-white leading-tight">
             Latent Reasoning{' '}
@@ -37,9 +37,9 @@ export const LandingPage: React.FC<Props> = ({ onStartLab }) => {
           From tokens and attention to continuous hidden-state reasoning — and the research frontier beyond conventional token-by-token generation.
         </p>
 
-        <div className="inline-block p-2.5 px-4 rounded-lg bg-slate-900/80 border border-slate-800 text-xs sm:text-sm font-mono text-cyan-300/90 shadow-inner">
-          <span className="text-slate-500">Inquiry: </span>
-          <em>Why must machine reasoning be externalized as generated text tokens?</em>
+        <div className="inline-block p-2.5 px-4 rounded-lg bg-slate-900/80 border border-slate-800 text-xs sm:text-sm text-cyan-300/90 shadow-inner">
+          <span className="text-slate-400 font-medium">Fundamental Inquiry: </span>
+          <em className="italic">Why must machine reasoning be externalized as generated text tokens?</em>
         </div>
 
         <div className="flex flex-wrap items-center justify-center gap-3 pt-1">
@@ -52,15 +52,15 @@ export const LandingPage: React.FC<Props> = ({ onStartLab }) => {
         <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
           <button
             onClick={() => onStartLab(1)}
-            className="group relative inline-flex items-center gap-2.5 px-8 py-4 rounded-xl bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 text-white font-bold text-sm tracking-wider uppercase shadow-[0_0_25px_rgba(6,182,212,0.35)] hover:shadow-[0_0_35px_rgba(6,182,212,0.55)] hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer border border-cyan-300/40"
+            className="group relative inline-flex items-center gap-2.5 px-8 py-4 rounded-xl bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 text-white font-semibold text-sm tracking-normal shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/35 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer border border-cyan-400/30"
           >
-            <span>ENTER LABORATORY (CURRICULUM)</span>
+            <span>Enter Laboratory Curriculum</span>
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </button>
         </div>
 
         {/* 2-Minute Evaluator Fast-Track Banner */}
-        <div className="max-w-4xl mx-auto p-5 rounded-2xl instrument-panel text-left space-y-4 shadow-2xl relative overflow-hidden">
+        <div className="max-w-5xl mx-auto p-5 md:p-6 rounded-2xl instrument-panel text-left space-y-4 shadow-2xl relative overflow-hidden">
           <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/5 rounded-full blur-2xl pointer-events-none" />
           
           <div className="flex flex-wrap items-center justify-between gap-2 border-b border-cyan-500/15 pb-2.5">

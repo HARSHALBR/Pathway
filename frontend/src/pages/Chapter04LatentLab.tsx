@@ -43,7 +43,7 @@ export const Chapter04LatentLab: React.FC<Props> = ({ onNextChapter }) => {
   const isCorrect = latentData?.correct || false;
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8 space-y-12">
+    <div className="w-[94%] max-w-[1560px] mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-10 space-y-10">
       {/* Chapter Header */}
       <div className="space-y-3">
         <div className="flex flex-wrap items-center gap-2">
@@ -58,143 +58,165 @@ export const Chapter04LatentLab: React.FC<Props> = ({ onNextChapter }) => {
           Latent Reasoning Laboratory: Reactive Recurrence Sandbox
         </h1>
 
-        <p className="text-slate-300 text-sm md:text-base leading-relaxed max-w-3xl">
+        <p className="text-slate-300 text-sm md:text-base leading-relaxed max-w-4xl">
           Directly manipulate recurrence rounds <span className="font-mono text-cyan-300 font-bold">R</span>. 
           Every slider adjustment triggers a live forward pass through the pure NumPy recurrence engine, 
           generating the exact trajectory <span className="font-mono text-cyan-300">S₀ → S₁ → ... → S_R</span>.
         </p>
       </div>
 
-      {/* 1. CONTROL SURFACE: Large Reactive R Slider */}
-      <div className="hierarchy-control p-6 space-y-6">
-        <div className="flex flex-wrap items-center justify-between gap-4 border-b border-cyan-500/20 pb-3">
+      {/* 1. CONTROL SURFACE: Large Reactive R Slider & Task Sandbox */}
+      <div className="hierarchy-control p-6 md:p-8 space-y-6">
+        <div className="flex flex-wrap items-center justify-between gap-4 border-b border-cyan-500/20 pb-4">
           <div>
             <span className="text-xs font-mono uppercase tracking-wider text-cyan-300 font-semibold flex items-center gap-2">
-              <Sliders className="w-3.5 h-3.5 text-cyan-400" />
-              <span>[1. WHAT I CONTROL] Recurrent Iteration Slider R ∈ [1, 10]:</span>
+              <Sliders className="w-4 h-4 text-cyan-400" />
+              <span>[1. What I Control] Recurrent Iteration Sandbox</span>
             </span>
-            <div className="flex items-baseline gap-3 mt-1">
-              <span className="text-3xl md:text-4xl font-extrabold font-mono text-white text-cyan-300 drop-shadow-[0_0_15px_rgba(6,182,212,0.4)]">
-                R = {R}
-              </span>
-              <span className="text-xs text-slate-400 font-mono">
-                ({R} recurrent non-linear vector updates executed in NumPy)
-              </span>
-            </div>
+            <p className="text-xs text-slate-400 mt-1">
+              Adjust recurrence depth R or generate new arithmetic problems to trigger live NumPy execution.
+            </p>
           </div>
 
           <div className="flex items-center gap-4">
-            <div className={`px-4 py-2 rounded-xl border flex items-center gap-2 shadow-lg ${
+            <div className={`px-4 py-2 rounded-xl border flex items-center gap-2.5 shadow-lg ${
               isCorrect
                 ? 'bg-emerald-950/70 border-emerald-500/60 text-emerald-300 font-bold shadow-[0_0_15px_rgba(16,185,129,0.2)]'
                 : 'bg-rose-950/70 border-rose-500/60 text-rose-300 font-bold shadow-[0_0_15px_rgba(244,63,94,0.2)]'
             }`}>
               <span className="text-sm font-mono">Prediction: {latentData?.prediction}</span>
-              <span className="text-xs">({isCorrect ? '✓ Match' : '✗ Mispredict'})</span>
+              <span className="text-xs font-normal">({isCorrect ? '✓ Match' : '✗ Mispredict'})</span>
             </div>
 
             <div className="text-right">
               <span className="text-[10px] text-slate-400 block font-mono uppercase">Ground Truth</span>
-              <span className="text-base font-mono font-bold text-white">{latentData?.ground_truth}</span>
+              <span className="text-lg font-mono font-bold text-white">{latentData?.ground_truth}</span>
             </div>
           </div>
         </div>
 
-        {/* The Slider */}
-        <div className="space-y-2">
-          <input
-            type="range"
-            min={1}
-            max={10}
-            value={R}
-            onChange={(e) => setR(Number(e.target.value))}
-            className="w-full h-3 bg-slate-900 rounded-lg appearance-none cursor-pointer accent-cyan-400 border border-slate-800"
-          />
-          <div className="flex justify-between text-[11px] font-mono text-slate-400">
-            <span>R = 1 (Single update)</span>
-            <span>R = 5 (Standard depth)</span>
-            <span>R = 10 (Deep recurrence)</span>
-          </div>
-        </div>
+        {/* Multi-column grid for R Slider + Task Controls */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          {/* Left Column: R Slider and Causal Explanation */}
+          <div className="lg:col-span-7 space-y-5">
+            <div className="space-y-3 p-4 rounded-xl bg-slate-950/60 border border-cyan-500/20">
+              <div className="flex items-baseline justify-between">
+                <span className="text-xs font-mono text-cyan-300 font-semibold">
+                  Recurrent Iteration Depth:
+                </span>
+                <span className="text-xs text-slate-400 font-mono">
+                  ({R} recurrent non-linear vector updates)
+                </span>
+              </div>
 
-        {/* Dynamic Causal Explanation of R */}
-        <div className="hierarchy-why p-4 rounded-xl text-xs text-slate-200 leading-relaxed space-y-1">
-          <div className="flex items-center gap-2 text-purple-300 font-bold font-mono">
-            <Info className="w-4 h-4 text-purple-400" />
-            <span>[4. WHY IT CHANGED] Causal Mechanics of Recurrence Parameter R</span>
-          </div>
-          <p>
-            R controls how many internal recurrent computation rounds occur before the final readout. Increasing R gives the model additional opportunities to transform its internal state (<code className="text-cyan-300 font-mono">S_t ∈ ℝ⁴⁸</code>) without emitting another reasoning token into the context window.
-            {R === 1
-              ? " At R = 1, only a single transition (S₀ ➔ S₁) occurs, providing minimal opportunity for non-linear state refinement."
-              : R <= 4
-              ? ` At R = ${R}, the state undergoes ${R} sequential non-linear matrix transformations before the readout classification head.`
-              : ` At R = ${R}, deep latent recurrence takes place. Notice that beyond a certain depth, state adjustments diminish or saturate; increasing R does not automatically guarantee higher accuracy.`}
-          </p>
-        </div>
-
-        {/* Task Parameter Subcontrols */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-slate-800 text-xs">
-          <div>
-            <div className="flex justify-between items-center mb-1">
-              <span className="text-slate-400 font-mono">Task Expression:</span>
-              <button
-                onClick={() => setSeed(Math.floor(Math.random() * 1000))}
-                className="text-[10px] text-cyan-400 hover:text-cyan-300 font-mono underline cursor-pointer"
-              >
-                Randomize (Seed {seed})
-              </button>
+              <div className="flex items-center gap-5">
+                <span className="text-4xl font-extrabold font-mono text-cyan-300 drop-shadow-[0_0_15px_rgba(6,182,212,0.4)] shrink-0">
+                  R = {R}
+                </span>
+                <div className="flex-1 space-y-2">
+                  <input
+                    type="range"
+                    min={1}
+                    max={10}
+                    value={R}
+                    onChange={(e) => setR(Number(e.target.value))}
+                    className="w-full h-3 bg-slate-900 rounded-lg appearance-none cursor-pointer accent-cyan-400 border border-slate-800"
+                  />
+                  <div className="flex justify-between text-[11px] font-mono text-slate-400">
+                    <span>R=1 (Single update)</span>
+                    <span>R=5 (Standard depth)</span>
+                    <span>R=10 (Deep recurrence)</span>
+                  </div>
+                </div>
+              </div>
             </div>
-            <span className="font-mono font-bold text-white text-sm">
-              {latentData?.expression || 'Loading...'}
-            </span>
+
+            {/* Dynamic Causal Explanation of R */}
+            <div className="hierarchy-why p-4 rounded-xl text-xs text-slate-200 leading-relaxed space-y-1.5">
+              <div className="flex items-center gap-2 text-purple-300 font-bold font-mono">
+                <Info className="w-4 h-4 text-purple-400" />
+                <span>[4. Why It Changed] Causal Mechanics of Recurrence Parameter R</span>
+              </div>
+              <p>
+                R controls how many internal recurrent computation rounds occur before the final readout. Increasing R gives the model additional opportunities to transform its internal state (<code className="text-cyan-300 font-mono">S_t ∈ ℝ⁴⁸</code>) without emitting another reasoning token into the context window.
+                {R === 1
+                  ? " At R = 1, only a single transition (S₀ ➔ S₁) occurs, providing minimal opportunity for non-linear state refinement."
+                  : R <= 4
+                  ? ` At R = ${R}, the state undergoes ${R} sequential non-linear matrix transformations before the readout classification head.`
+                  : ` At R = ${R}, deep latent recurrence takes place. Notice that beyond a certain depth, state adjustments diminish or saturate; increasing R does not automatically guarantee higher accuracy.`}
+              </p>
+            </div>
           </div>
 
-          <div>
-            <span className="text-slate-400 block mb-1 font-mono">Modulus (n):</span>
-            <select
-              value={modulus}
-              onChange={(e) => setModulus(Number(e.target.value))}
-              className="w-full py-1 px-2.5 rounded bg-slate-900 border border-slate-800 text-slate-200 font-mono cursor-pointer"
-            >
-              {[7, 11, 13, 17, 19, 23].map((m) => (
-                <option key={m} value={m}>Mod {m}</option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <span className="text-slate-400 block mb-1 font-mono">Difficulty:</span>
-            <div className="flex gap-1">
-              {[1, 2, 3, 4].map((lvl) => (
+          {/* Right Column: Task Parameters */}
+          <div className="lg:col-span-5 space-y-4 flex flex-col justify-between p-4 rounded-xl bg-slate-950/60 border border-slate-800/80">
+            <div>
+              <div className="flex justify-between items-center mb-1.5">
+                <span className="text-xs text-slate-400 font-mono uppercase">Task Expression:</span>
                 <button
-                  key={lvl}
-                  onClick={() => setLevel(lvl)}
-                  className={`flex-1 py-1 rounded text-xs font-mono font-bold transition-all cursor-pointer ${
-                    level === lvl ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-400/80 shadow-sm' : 'bg-slate-900 text-slate-400 border border-slate-800'
-                  }`}
+                  onClick={() => setSeed(Math.floor(Math.random() * 1000))}
+                  className="text-[11px] text-cyan-400 hover:text-cyan-300 font-mono underline cursor-pointer"
                 >
-                  L{lvl}
+                  Randomize (Seed {seed})
                 </button>
-              ))}
+              </div>
+              <div className="p-3 rounded-lg bg-slate-900 border border-slate-800 font-mono font-bold text-white text-base">
+                {latentData?.expression || 'Loading...'}
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <span className="text-slate-400 block mb-1.5 text-xs font-mono">Modulus (n):</span>
+                <select
+                  value={modulus}
+                  onChange={(e) => setModulus(Number(e.target.value))}
+                  className="w-full py-1.5 px-2.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-200 font-mono text-xs cursor-pointer"
+                >
+                  {[7, 11, 13, 17, 19, 23].map((m) => (
+                    <option key={m} value={m}>Mod {m}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <span className="text-slate-400 block mb-1.5 text-xs font-mono">Difficulty:</span>
+                <div className="flex gap-1">
+                  {[1, 2, 3, 4].map((lvl) => (
+                    <button
+                      key={lvl}
+                      onClick={() => setLevel(lvl)}
+                      className={`flex-1 py-1.5 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
+                        level === lvl ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-400/80 shadow-sm' : 'bg-slate-900 text-slate-400 border border-slate-800 hover:text-slate-200'
+                      }`}
+                    >
+                      L{lvl}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="text-[11px] text-slate-400 font-mono border-t border-slate-800/80 pt-2.5">
+              💡 Every change triggers a fresh forward pass in pure NumPy.
             </div>
           </div>
         </div>
       </div>
 
       {/* 2. COMPUTED APPARATUS: Coordinated Visualizations */}
-      <div className="hierarchy-computed p-6 space-y-4">
-        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-indigo-500/20 pb-3">
+      <div className="hierarchy-computed p-6 md:p-8 space-y-6">
+        <div className="flex flex-wrap items-center justify-between gap-4 border-b border-indigo-500/20 pb-4">
           <h3 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
             <Cpu className="w-4 h-4 text-cyan-400" />
-            <span>[2. WHAT THE MODEL COMPUTED] Latent Recurrence Microscope</span>
+            <span>[2. What the Model Computed] Latent Recurrence Microscope</span>
           </h3>
 
           {/* Tab Selector */}
           <div className="flex bg-slate-950 p-1 rounded-xl border border-slate-800 text-xs font-mono">
             <button
               onClick={() => setActiveTab('matrix')}
-              className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
+              className={`px-3.5 py-1.5 rounded-lg transition-all cursor-pointer ${
                 activeTab === 'matrix' ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-400/60 font-bold shadow-[0_0_10px_rgba(6,182,212,0.2)]' : 'text-slate-400 hover:text-white'
               }`}
             >
@@ -202,7 +224,7 @@ export const Chapter04LatentLab: React.FC<Props> = ({ onNextChapter }) => {
             </button>
             <button
               onClick={() => setActiveTab('deltas')}
-              className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
+              className={`px-3.5 py-1.5 rounded-lg transition-all cursor-pointer ${
                 activeTab === 'deltas' ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-400/60 font-bold shadow-[0_0_10px_rgba(6,182,212,0.2)]' : 'text-slate-400 hover:text-white'
               }`}
             >
@@ -210,7 +232,7 @@ export const Chapter04LatentLab: React.FC<Props> = ({ onNextChapter }) => {
             </button>
             <button
               onClick={() => setActiveTab('pca')}
-              className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
+              className={`px-3.5 py-1.5 rounded-lg transition-all cursor-pointer ${
                 activeTab === 'pca' ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-400/60 font-bold shadow-[0_0_10px_rgba(6,182,212,0.2)]' : 'text-slate-400 hover:text-white'
               }`}
             >
@@ -221,19 +243,19 @@ export const Chapter04LatentLab: React.FC<Props> = ({ onNextChapter }) => {
 
         {/* Tab 1: State Matrix Heatmap */}
         {activeTab === 'matrix' && (
-          <div className="p-4 rounded-xl instrument-panel border border-cyan-500/30 space-y-3">
+          <div className="p-5 rounded-xl instrument-panel border border-cyan-500/30 space-y-4">
             <div className="flex items-center justify-between text-xs text-slate-400 font-mono">
               <span>Rows: Recurrent Rounds (S₀ → S_{R}) | Columns: 48 Continuous Latent Coordinates</span>
               <span className="font-mono text-cyan-400">Fixed Dimension d = 48</span>
             </div>
 
-            <div className="overflow-x-auto space-y-1.5 py-2">
+            <div className="space-y-2 py-2">
               {states.map((st, roundIdx) => (
-                <div key={roundIdx} className="flex items-center gap-2">
+                <div key={roundIdx} className="flex items-center gap-3">
                   <span className="w-14 text-right font-mono text-xs text-cyan-300 font-bold shrink-0">
                     S_{roundIdx}
                   </span>
-                  <div className="flex gap-0.5 overflow-x-auto">
+                  <div className="flex gap-1 flex-1 overflow-x-auto py-0.5">
                     {st.map((val, dimIdx) => {
                       const normalized = Math.max(-1, Math.min(1, val));
                       const isPositive = normalized >= 0;
@@ -245,7 +267,7 @@ export const Chapter04LatentLab: React.FC<Props> = ({ onNextChapter }) => {
                         <div
                           key={dimIdx}
                           title={`Round S_${roundIdx}, Dim ${dimIdx}: ${val.toFixed(3)}`}
-                          className="w-3.5 h-6 rounded-xs hover:scale-125 transition-transform cursor-pointer"
+                          className="flex-1 min-w-[12px] h-7 rounded-xs hover:scale-125 transition-transform cursor-pointer"
                           style={{ backgroundColor: bg }}
                         />
                       );
@@ -254,7 +276,7 @@ export const Chapter04LatentLab: React.FC<Props> = ({ onNextChapter }) => {
                 </div>
               ))}
             </div>
-            <div className="flex justify-between items-center text-[10px] text-slate-400 pt-1 font-mono border-t border-slate-900">
+            <div className="flex justify-between items-center text-[11px] text-slate-400 pt-2 font-mono border-t border-slate-900">
               <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-xs bg-rose-500/80 inline-block" /> Negative Activation</span>
               <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-xs bg-cyan-500/80 inline-block" /> Positive Activation</span>
             </div>
@@ -263,7 +285,7 @@ export const Chapter04LatentLab: React.FC<Props> = ({ onNextChapter }) => {
 
         {/* Tab 2: State Change Deltas */}
         {activeTab === 'deltas' && (
-          <div className="p-4 rounded-xl instrument-panel border border-emerald-500/30 space-y-4">
+          <div className="p-5 rounded-xl instrument-panel border border-emerald-500/30 space-y-4">
             <div className="text-xs text-slate-400 font-mono">
               L2 Norm of State Change per Round: <code className="text-emerald-300 font-mono">||S_{`{t+1}`} - S_t||₂</code>
             </div>
@@ -274,7 +296,7 @@ export const Chapter04LatentLab: React.FC<Props> = ({ onNextChapter }) => {
                 const pct = Math.round((norm / maxNorm) * 100);
                 const isLarge = norm > 0.5;
                 return (
-                  <div key={idx} className="p-3.5 rounded-xl bg-slate-950/90 border border-slate-800 space-y-1.5">
+                  <div key={idx} className="p-4 rounded-xl bg-slate-950/90 border border-slate-800 space-y-2">
                     <div className="flex justify-between text-xs font-mono text-slate-300">
                       <span className="font-bold text-cyan-300">Recurrent Step S_{idx} ➔ S_{idx + 1}</span>
                       <span className="text-emerald-400 font-bold">||ΔS||₂ = {norm.toFixed(4)}</span>
@@ -285,7 +307,7 @@ export const Chapter04LatentLab: React.FC<Props> = ({ onNextChapter }) => {
                         style={{ width: `${pct}%` }}
                       />
                     </div>
-                    <p className="text-[11px] text-slate-400 leading-snug">
+                    <p className="text-xs text-slate-400 leading-relaxed">
                       💡 <strong>Pedagogical Meaning:</strong> Round {idx + 1} {isLarge ? 'substantially reshaped' : 'moderately fine-tuned'} the continuous internal representation (magnitude {norm.toFixed(3)}). 
                       The model executed another round of non-linear matrix computation (<code className="text-cyan-300 font-mono">W₂ tanh(W₁ s + b₁)</code>) <strong>without adding a single token to the context window</strong>.
                     </p>
@@ -298,17 +320,17 @@ export const Chapter04LatentLab: React.FC<Props> = ({ onNextChapter }) => {
 
         {/* Tab 3: 2D PCA Trajectory */}
         {activeTab === 'pca' && (
-          <div className="p-4 rounded-xl instrument-panel border border-indigo-500/30 space-y-3">
+          <div className="p-5 rounded-xl instrument-panel border border-indigo-500/30 space-y-4">
             <div className="flex items-center justify-between text-xs text-slate-400 font-mono">
               <span>2D Principal Component Projection of 48-Dimensional Trajectory</span>
               <span className="text-amber-400 font-mono text-[10px]">⚠️ Visualization projection only; not raw model state</span>
             </div>
 
-            <div className="p-6 bg-slate-950/90 rounded-xl border border-slate-800/80 flex flex-col items-center shadow-inner">
-              <svg viewBox="-60 -60 120 120" className="w-full max-w-md h-64 overflow-visible">
+            <div className="w-full flex flex-col items-center justify-center p-8 bg-slate-950/90 rounded-xl border border-slate-800/80 shadow-inner">
+              <svg viewBox="-65 -65 130 130" className="w-full max-w-2xl h-80 overflow-visible">
                 {/* Axes */}
-                <line x1="-50" y1="0" x2="50" y2="0" stroke="#334155" strokeWidth="0.5" strokeDasharray="2 2" />
-                <line x1="0" y1="-50" x2="0" y2="50" stroke="#334155" strokeWidth="0.5" strokeDasharray="2 2" />
+                <line x1="-55" y1="0" x2="55" y2="0" stroke="#334155" strokeWidth="0.5" strokeDasharray="2 2" />
+                <line x1="0" y1="-55" x2="0" y2="55" stroke="#334155" strokeWidth="0.5" strokeDasharray="2 2" />
 
                 {/* Trajectory Polyline */}
                 {pcaPoints.length > 1 && (
@@ -344,7 +366,7 @@ export const Chapter04LatentLab: React.FC<Props> = ({ onNextChapter }) => {
                 ))}
               </svg>
 
-              <div className="flex items-center gap-4 text-xs font-mono text-slate-400 mt-2">
+              <div className="flex items-center gap-6 text-xs font-mono text-slate-400 mt-4">
                 <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-emerald-400" /> Start (S₀)</span>
                 <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-cyan-500" /> Latent Updates</span>
                 <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-amber-400" /> Final State (S_{R})</span>
