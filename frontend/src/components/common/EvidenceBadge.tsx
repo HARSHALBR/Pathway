@@ -10,37 +10,37 @@ interface Props {
 const BADGE_CONFIG: Record<BadgeType, { text: string; bg: string; textCol: string; border: string; desc: string }> = {
   live: {
     text: '🟢 LIVE COMPUTATION',
-    bg: 'bg-emerald-950/70',
-    textCol: 'text-emerald-300',
-    border: 'border-emerald-500/40',
+    bg: 'bg-emerald-50',
+    textCol: 'text-emerald-700',
+    border: 'border-emerald-200',
     desc: 'Computed on the fly in real time by the local pure NumPy mathematical engine.'
   },
   toy: {
     text: '🟡 TOY MODEL',
-    bg: 'bg-amber-950/70',
-    textCol: 'text-amber-300',
-    border: 'border-amber-500/40',
+    bg: 'bg-amber-50',
+    textCol: 'text-amber-700',
+    border: 'border-amber-200',
     desc: 'Educational inspectable baseline model designed for learning, not production scale.'
   },
   published: {
     text: '🔵 PUBLISHED RESULT',
-    bg: 'bg-blue-950/70',
-    textCol: 'text-blue-300',
-    border: 'border-blue-500/40',
+    bg: 'bg-blue-50',
+    textCol: 'text-blue-700',
+    border: 'border-blue-200',
     desc: 'Reported in peer-reviewed or preprint research papers (not reproduced locally).'
   },
   primary: {
     text: '⚪ PRIMARY SOURCE',
-    bg: 'bg-slate-900/80',
-    textCol: 'text-slate-300',
-    border: 'border-slate-500/40',
+    bg: 'bg-indigo-50',
+    textCol: 'text-indigo-700',
+    border: 'border-indigo-200',
     desc: 'Direct citations, definitions, and equations from original published papers.'
   },
   limitation: {
     text: '⚠️ FAILURE / LIMITATION',
-    bg: 'bg-rose-950/70',
-    textCol: 'text-rose-300',
-    border: 'border-rose-500/40',
+    bg: 'bg-rose-50',
+    textCol: 'text-rose-700',
+    border: 'border-rose-200',
     desc: 'Empirical boundary condition or failure mode of the simplified toy architecture.'
   }
 };

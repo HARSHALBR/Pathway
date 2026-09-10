@@ -40,22 +40,22 @@ export const Navbar: React.FC<Props> = ({ currentChapter, onSelectChapter, backe
   const nextChapter = currentChapter < CHAPTERS.length - 1 ? currentChapter + 1 : null;
 
   return (
-    <header className="sticky top-0 z-40 w-full bg-[#05070A]/90 backdrop-blur-md border-b border-white/[0.08]">
+    <header className="sticky top-0 z-40 w-full bg-white/90 backdrop-blur-md border-b border-slate-200/80 shadow-xs">
       <div className="lab-container">
-        <div className="flex items-center justify-between h-14">
+        <div className="flex items-center justify-between h-16">
           {/* LEFT: Identity */}
           <div 
             className="flex items-center gap-3 cursor-pointer group select-none"
             onClick={() => onSelectChapter(0)}
           >
-            <div className="w-7 h-7 rounded-md bg-cyan-950/80 border border-cyan-500/30 flex items-center justify-center text-cyan-300">
+            <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-indigo-600 to-teal-600 flex items-center justify-center text-white shadow-sm shadow-indigo-500/20">
               <Cpu className="w-4 h-4" />
             </div>
             <div>
-              <span className="font-bold tracking-tight text-white text-sm block leading-none">
+              <span className="font-extrabold tracking-tight text-slate-900 text-sm block leading-none">
                 PATHWAY
               </span>
-              <span className="text-[11px] text-slate-400 font-normal block leading-tight mt-0.5">
+              <span className="text-[11px] text-slate-500 font-normal block leading-tight mt-0.5">
                 Latent Reasoning Laboratory
               </span>
             </div>
@@ -69,13 +69,13 @@ export const Navbar: React.FC<Props> = ({ currentChapter, onSelectChapter, backe
                 <button
                   key={ch.id}
                   onClick={() => onSelectChapter(ch.id)}
-                  className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-sans transition-colors cursor-pointer ${
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition-all cursor-pointer ${
                     active
-                      ? 'bg-cyan-500/10 text-cyan-300 font-semibold border border-cyan-500/30'
-                      : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/60 border border-transparent'
+                      ? 'bg-indigo-50 text-indigo-700 font-semibold border border-indigo-200/80 shadow-2xs'
+                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/80 border border-transparent'
                   }`}
                 >
-                  <span className={`w-1.5 h-1.5 rounded-full ${active ? 'bg-cyan-400' : 'bg-transparent'}`} />
+                  <span className={`w-1.5 h-1.5 rounded-full ${active ? 'bg-indigo-600' : 'bg-transparent'}`} />
                   <span>{ch.shortTitle}</span>
                 </button>
               );
@@ -84,29 +84,29 @@ export const Navbar: React.FC<Props> = ({ currentChapter, onSelectChapter, backe
 
           {/* RIGHT: Backend indicator & Stepper */}
           <div className="flex items-center gap-2.5">
-            <div className="flex items-center gap-1.5 text-xs bg-[#0E131A] px-2.5 py-1 rounded-md border border-white/[0.08]">
-              <span className={`w-2 h-2 rounded-full ${backendOnline ? 'bg-emerald-400' : 'bg-rose-500'}`} />
-              <span className="hidden sm:inline text-slate-300 font-mono text-[11px]">
-                {backendOnline ? 'NUMPY // ONLINE' : 'ENGINE // OFFLINE'}
+            <div className="flex items-center gap-1.5 text-xs bg-slate-50 px-2.5 py-1 rounded-xl border border-slate-200">
+              <span className={`w-2 h-2 rounded-full ${backendOnline ? 'bg-emerald-500' : 'bg-rose-500'}`} />
+              <span className="hidden sm:inline text-slate-700 font-sans text-[11px] font-medium">
+                {backendOnline ? 'NumPy Online' : 'Engine Offline'}
               </span>
             </div>
 
-            <div className="flex items-center gap-0.5 bg-[#0E131A] p-0.5 rounded-md border border-white/[0.08]">
+            <div className="flex items-center gap-0.5 bg-slate-50 p-0.5 rounded-xl border border-slate-200">
               <button
                 disabled={prevChapter === null}
                 onClick={() => prevChapter !== null && onSelectChapter(prevChapter)}
-                className="p-1 rounded text-slate-400 hover:text-white disabled:opacity-25 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                className="p-1 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-white disabled:opacity-25 disabled:cursor-not-allowed transition-colors cursor-pointer"
                 title="Previous Chapter"
               >
                 <ChevronLeft className="w-3.5 h-3.5" />
               </button>
-              <span className="text-[11px] font-mono text-cyan-300 px-1 font-semibold">
+              <span className="text-[11px] font-mono text-indigo-600 px-1.5 font-bold">
                 {currentChapter} / {CHAPTERS.length - 1}
               </span>
               <button
                 disabled={nextChapter === null}
                 onClick={() => nextChapter !== null && onSelectChapter(nextChapter)}
-                className="p-1 rounded text-slate-400 hover:text-white disabled:opacity-25 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                className="p-1 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-white disabled:opacity-25 disabled:cursor-not-allowed transition-colors cursor-pointer"
                 title="Next Chapter"
               >
                 <ChevronRight className="w-3.5 h-3.5" />
@@ -116,15 +116,15 @@ export const Navbar: React.FC<Props> = ({ currentChapter, onSelectChapter, backe
         </div>
 
         {/* Mobile Chapter Bar */}
-        <div className="lg:hidden flex items-center gap-1 overflow-x-auto py-1.5 border-t border-white/[0.06] scrollbar-none">
+        <div className="lg:hidden flex items-center gap-1 overflow-x-auto py-2 border-t border-slate-100 scrollbar-none">
           {CHAPTERS.map((ch) => (
             <button
               key={ch.id}
               onClick={() => onSelectChapter(ch.id)}
-              className={`whitespace-nowrap px-2 py-0.5 rounded text-xs transition-colors ${
+              className={`whitespace-nowrap px-2.5 py-1 rounded-lg text-xs transition-colors cursor-pointer ${
                 ch.id === currentChapter
-                  ? 'bg-cyan-500/15 text-cyan-300 border border-cyan-500/40 font-medium'
-                  : 'text-slate-400 bg-slate-900/40'
+                  ? 'bg-indigo-50 text-indigo-700 border border-indigo-200 font-semibold'
+                  : 'text-slate-600 bg-slate-50 hover:bg-slate-100'
               }`}
             >
               {ch.shortTitle}
